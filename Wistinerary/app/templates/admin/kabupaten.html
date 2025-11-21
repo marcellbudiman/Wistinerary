@@ -1,0 +1,289 @@
+{% extends "component/baseadmin.html" %}
+{% load static %}
+{% block title %}Form Tambah Kabupaten{% endblock %}
+
+{% block content %}
+<div class="max-w">
+
+    <div class="block border border-gray-200 rounded-lg shadow"  style="margin-bottom: 20px;">
+        <!-- Search Bar -->
+        <div class="flex items-center justify-between mb-4 px-4 mt-4">
+            <!-- Kolom kiri: search -->
+            <div class="w-80">
+                <div class="relative">
+                    <div class="absolute inset-y-0 left-3 flex items-center pointer-events-none">
+                        <svg class="w-4 h-4 text-gray-500" fill="none" viewBox="0 0 20 20">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
+                        </svg>
+                    </div>
+                    <input type="text" id="searchInput" placeholder="Cari kabupaten..."
+                        class="block pt-2 pl-10 text-sm border border-gray-300 rounded-lg w-full bg-gray-50 focus:ring-blue-500 focus:border-blue-500">
+                </div>
+            </div>
+
+            <!-- Kolom tengah: judul -->
+            <h2 class="text-2xl font-semibold text-center flex-1">Data Kabupaten</h2>
+
+            <!-- Kolom kanan: kosong sebagai penyeimbang -->
+            <div class="w-80"></div>
+        </div>
+
+        <!--Table-->
+        <div class="block overflow-y-auto" style="max-height: 250px; margin-bottom: 20px;">
+            <table class="min-w-full text-sm text-left" id="kabupatenTable">
+            <thead
+            class="sticky top-0 z-10 text-s bg-green-500 text-white">
+            <tr class="text-center">
+                <th scope="col" class="px-6 py-3">Kode Kabupaten</th>
+                <th scope="col" class="px-6 py-3">Provinsi</th>
+                <th scope="col" class="px-6 py-3">Nama Kabupaten</th>
+                <th scope="col" class="px-6 py-3">Foto Icon</th>
+                <th scope="col" class="px-6 py-3">Keterangan Foto</th>
+                <th scope="col" class="px-6 py-3">Alamat Kabupaten</th>
+                <th scope="col" class="px-6 py-3">Keterangan Kabupaten</th>
+                <th scope="col" class="px-6 py-3" colspan="2">Aksi</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for kab in kabupaten %}
+            <tr class="border-b">
+                <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                {{ kab.kabupatenKODE }}
+                </td>
+                <td class="px-6 py-4">
+                {{ kab.provinsiKODE.provinsiNAMA|default:"N/A" }}
+                </td>
+                <td class="px-6 py-4">
+                {{ kab.kabupatenNAMA }}
+                </td>
+                <td class="px-6 py-4">
+                    {% if kab.kabupatenFOTOICON %}
+                        <img src="/media/kabupaten/{{ kab.kabupatenFOTOICON }}" alt="Icon" class="w-16 h-16 object-cover">
+                    {% else %}
+                        <img src="{% static 'images/notfound.png' %}" alt="Foto Tidak Ditemukan" class="w-20 h-12">
+                    {% endif %}
+                </td>
+                <td class="px-6 py-4">
+                {{ kab.kabupatenFOTOICONKET }}
+                </td>
+                <td class="px-6 py-4">
+                {{ kab.kabupatenALAMAT }}
+                </td>
+                <td class="px-6 py-4">
+                {{ kab.kabupatenKET }}
+                </td>
+                <td class="px-6 py-4">
+                    <a href="{% url 'editkabupaten' kab.kabupatenKODE %}" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">
+                        <button type="button">
+                            Edit
+                        </button>
+                    </a>
+                </td>
+                <td class="px-6 py-4">
+                    <form action="{% url 'deletekabupaten' kab.kabupatenKODE %}" method="post" onsubmit="return confirmDelete();">
+                        {% csrf_token %}
+                        <button type="submit" class="font-medium text-red-600 hover:underline ms-4">
+                            Delete
+                        </button>
+                    </form>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="6" class="px-6 py-4 text-center text-gray-500 dark:text-gray-400">Belum ada data kabupaten</td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        </div>
+    </div>
+
+    <div class="flex items-center justify-center">
+        <form method="POST" enctype="multipart/form-data" class="w-full max-w bg-white border border-gray-200 rounded-lg shadow p-6" action="{% if edit_kab %}
+                 {% url 'editkabupaten' edit_kab.kabupatenKODE %}
+               {% else %}
+                 {% url 'tambahkabupaten' %}
+               {% endif %}">
+            {% csrf_token %}
+
+            <!-- Pesan Error / Success -->
+            {% if messages %}
+                <div class="max-w mx-auto mt-4 alert">
+                    {% for message in messages %}
+                        <div id="message-{{ forloop.counter }}" 
+                            class="message-alert p-4 mb-4 rounded-xl shadow-lg transform transition-all duration-500 ease-in-out opacity-100 translate-y-0 border
+                                    {% if message.tags == 'error' %} bg-red-50 border-red-200 text-red-800 border-l-4 border-l-red-500
+                                    {% elif message.tags == 'success' %} bg-green-50 border-green-200 text-green-800 border-l-4 border-l-green-500
+                                    {% else %} bg-gray-50 border-gray-200 text-gray-800 border-l-4 border-l-gray-500 {% endif %}">
+                            
+                            <div class="flex items-start">
+                                <!-- Icon -->
+                                <div class="flex-shrink-0 mr-3">
+                                    {% if message.tags == 'error' %}
+                                        <div class="w-8 h-8 bg-red-500 rounded-full flex items-center justify-center">
+                                            <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
+                                            </svg>
+                                        </div>
+                                    {% elif message.tags == 'success' %}
+                                        <div class="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center">
+                                            <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                                            </svg>
+                                        </div>
+                                    {% else %}
+                                        <div class="w-8 h-8 bg-gray-500 rounded-full flex items-center justify-center">
+                                            <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/>
+                                            </svg>
+                                        </div>
+                                    {% endif %}
+                                </div>
+                                
+                                <!-- Message Content -->
+                                <div class="flex-1">
+                                    <p class="font-semibold text-sm
+                                            {% if message.tags == 'error' %} text-red-800
+                                            {% elif message.tags == 'success' %} text-green-800
+                                            {% else %} text-gray-800 {% endif %}">
+                                        {% if message.tags == 'error' %}
+                                            Error
+                                        {% elif message.tags == 'success' %}
+                                            Berhasil!
+                                        {% else %}
+                                            Pemberitahuan!
+                                        {% endif %}
+                                    </p>
+                                    <p class="text-sm mt-1 
+                                            {% if message.tags == 'error' %} text-red-700
+                                            {% elif message.tags == 'success' %} text-green-700
+                                            {% else %} text-gray-700 {% endif %}">
+                                        {{ message }}
+                                    </p>
+                                </div>
+                                
+                                <!-- Close Button -->
+                                <button onclick="hideMessage('message-{{ forloop.counter }}')" 
+                                        class="flex-shrink-0 ml-2 
+                                                {% if message.tags == 'error' %} text-red-400 hover:text-red-600
+                                                {% elif message.tags == 'success' %} text-green-400 hover:text-green-600
+                                                {% elif message.tags == 'warning' %} text-yellow-400 hover:text-yellow-600
+                                                {% elif message.tags == 'info' %} text-blue-400 hover:text-blue-600
+                                                {% else %} text-gray-400 hover:text-gray-600 {% endif %}
+                                                transition-colors duration-200">
+                                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+            <!-- Pesan Error / Success -->
+            
+            <h2 class="text-center text-2xl font-semibold mb-6">{% if edit_kab %} Edit Kabupaten {% else %} Form Tambah Kabupaten {% endif %}</h2>
+
+            <div class="space-y-4">
+                <!-- Kode -->
+                <div class="grid grid-cols-3 items-center gap-4">
+                    <label for="kode" class="text-sm font-medium text-gray-700">Kode</label>
+                    <input type="text" name="kode" id="kode"
+                        class="col-span-2 border border-gray-300 rounded-lg p-2.5 text-sm w-full focus:ring-blue-500 focus:border-blue-500 {% if edit_kab %}bg-gray-200{% endif %}"
+                        placeholder="Masukkan kode" value="{% if edit_kab %}{{ edit_kab.kabupatenKODE }}{% endif %}" required {% if edit_kab %}disabled{% endif %} maxlength="2">
+                </div>
+
+                <!-- Provinsi -->
+                <div class="grid grid-cols-3 items-center gap-4">
+                    <label for="provinsi" class="text-sm font-medium text-gray-700">Provinsi</label>
+                    <select name="provinsi" id="provinsi" 
+                        class="col-span-2 border border-gray-300 rounded-lg p-2.5 text-sm w-full focus:ring-blue-500 focus:border-blue-500 
+                            {% if edit_kab %}bg-gray-200{% endif %}"
+                        {% if edit_kab %}disabled{% endif %}
+                        required>
+                        <option value="">Pilih provinsi</option>
+                        {% for prov in provinsi %}
+                            <option value="{{ prov.provinsiKODE }}" 
+                                {% if edit_kab and edit_kab.provinsiKODE.provinsiKODE == prov.provinsiKODE %}selected{% endif %}>
+                                {{ prov.provinsiNAMA }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <!-- Nama -->
+                <div class="grid grid-cols-3 items-center gap-4">
+                    <label for="nama" class="text-sm font-medium text-gray-700">Nama</label>
+                    <input type="text" name="nama" id="nama"
+                        class="col-span-2 border border-gray-300 rounded-lg p-2.5 text-sm w-full focus:ring-blue-500 focus:border-blue-500"
+                        placeholder="Masukkan nama" value="{% if edit_kab %}{{ edit_kab.kabupatenNAMA }}{% endif %}" required maxlength="60">
+                </div>
+
+                <!-- Alamat -->
+                <div class="grid grid-cols-3 items-center gap-4">
+                    <label for="ket" class="text-sm font-medium text-gray-700">Alamat</label>
+                    <input type="text" name="alamat" id="alamat"
+                        class="col-span-2 border border-gray-300 rounded-lg p-2.5 text-sm w-full focus:ring-blue-500 focus:border-blue-500"
+                        placeholder="Masukkan alamat" value="{% if edit_kab %}{{ edit_kab.kabupatenALAMAT }}{% endif %}" maxlength="255">
+                </div>
+
+                <!-- Keterangan -->
+                <div class="grid grid-cols-3 items-start gap-4">
+                    <label for="keterangan" class="text-sm font-medium text-gray-700">Keterangan</label>
+                    <textarea name="keterangan" id="keterangan" rows="3"
+                        class="col-span-2 border border-gray-300 rounded-lg p-2.5 text-sm w-full focus:ring-blue-500 focus:border-blue-500"
+                        placeholder="Masukkan keterangan">{% if edit_kab %}{{ edit_kab.kabupatenKET }}{% endif %}</textarea>
+                </div>
+
+                <!-- Poster -->
+                <div class="grid grid-cols-3 items-center gap-4">
+                    <label for="foto_icon" class="text-sm font-medium text-gray-700">Foto Icon</label>
+                    <div class="col-span-2">
+                        <input type="file" name="foto_icon" id="foto_icon" accept="image/*"
+                            class="border border-gray-300 rounded-lg p-2.5 text-sm w-full focus:ring-blue-500 focus:border-blue-500">
+                            {% if edit_kab and edit_kab.kabupatenFOTOICON %}
+                                <div class="mt-2">
+                                    <img src="/media/{{ edit_kab.kabupatenFOTOICON }}" alt="Foto Sekarang" class="w-20 h-24 object-cover rounded border">
+                                </div>
+                            {% endif %}
+                    </div>
+                </div>
+
+                <!-- Foto Icon Keterangan -->
+                <div class="grid grid-cols-3 items-start gap-4">
+                    <label for="foto_icon_ket" class="text-sm font-medium text-gray-700">Keterangan Foto Icon</label>
+                    <textarea name="foto_icon_ket" id="foto_icon_ket" rows="2"
+                        class="col-span-2 border border-gray-300 rounded-lg p-2.5 text-sm w-full focus:ring-blue-500 focus:border-blue-500"
+                        placeholder="Masukkan keterangan foto icon">{% if edit_kab %}{{ edit_kab.kabupatenFOTOICONKET }}{% endif %}</textarea>
+                </div>
+            </div>
+
+            <!-- Tombol -->
+            <div class="flex justify-center mt-6">
+                <button type="submit"
+                    class="px-6 py-2 text-sm font-medium text-white bg-blue-700 rounded-lg shadow hover:bg-blue-800 focus:ring-4 focus:ring-blue-300">
+                    {% if edit_kab %} Update {% else %} Simpan {% endif %}
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Script Search -->
+<script>
+    document.getElementById("searchInput").addEventListener("keyup", function () {
+        let filter = this.value.toLowerCase();
+        let rows = document.querySelectorAll("#kabupatenTable tbody tr");
+
+        rows.forEach(row => {
+            let text = row.innerText.toLowerCase();
+            row.style.display = text.includes(filter) ? "" : "none";
+        });
+    });
+
+    function confirmDelete() {
+        return confirm("Apakah Anda yakin ingin menghapus data kabupaten ini?");
+    }
+</script>
+{% endblock content %}

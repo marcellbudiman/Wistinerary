@@ -1,0 +1,84 @@
+{% extends "component/base.html" %}
+{% load static %}
+{% block title %}{{ kegiatan.eventNAMA }}{% endblock %}
+
+{% block content %}
+  {% include "component/navbar.html" %}
+    <!-- Main Content -->
+    <div class="container main-content-container detail">
+        <!-- Main Content Grid -->
+        <div class="grid grid-cols-2 gap-8 h-auto">
+            
+            <!-- Left Column - Image and Info -->
+            <div class="left-section flex  items-center justify-center">
+                <div class="image-section">
+                    <img src="/media/kegiatan/{{ kegiatan.eventPOSTER }}" 
+                        alt="{{ kegiatan.eventNAMA }}" 
+                        class="h-full w-auto object-contain">
+                </div>
+            </div>
+
+            <!-- Right Sidebar -->
+            <div class="space-y-6">
+                
+                <!-- Quick Info Card -->
+                <div class="bg-white rounded-2xl shadow-lg p-6">
+                    <h3 class="text-xl font-bold text-gray-800 mb-6">{{ kegiatan.eventNAMA }}</h3>
+                    
+                    <!-- Category Tags -->
+                    <div class="mb-6">
+                        <div class="flex flex-wrap gap-2">
+                            <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-medium">{{ kegiatan.kabupatenKODE.kabupatenNAMA }}</span>
+                    </div>
+                </div>
+                <!--Destinasi wisata-->
+                <div class="bg-gradient-to-br from-blue-50 to-blue-100 p-6 rounded-xl border border-blue-200">
+                      <a href="{% url 'detaildestinasi' obyekwisata.obyekKODE %}">
+                        <div class="flex items-center mb-4">
+                          <div class="bg-blue-500 rounded-lg p-2 mr-3">
+                              <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                              </svg>
+                          </div>
+                          <h4 class="font-semibold text-gray-800">Lokasi</h4>
+                      </div>
+                      <p class="text-gray-600">{{ obyekwisata.obyekNAMA }}</p>
+                      </a>
+                </div>
+                <!--Jam operasional-->
+                <div class="bg-gradient-to-br from-green-50 to-green-100 p-6 rounded-xl border border-green-200 mt-3">
+                      <div class="flex items-center mb-4">
+                          <div class="bg-green-500 rounded-lg p-2 mr-3">
+                              <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                              </svg>
+                          </div>
+                          <h4 class="font-semibold text-gray-800">Tanggal Kegiatan</h4>
+                      </div>
+                      <p class="text-gray-600">{{ kegiatan.eventMULAI|date:"j F Y"}} - {{ kegiatan.eventSELESAI|date:"j F Y"}}</p>
+                  </div>
+            </div>
+            </div>
+        </div>
+    </div> 
+
+    <div class="container mx-auto rounded-lg mt-2 mb-8 border p-8">
+        <div class="mb-6">
+            <h3 class="text-2xl font-bold text-gray-800 mb-4 flex items-center">
+                <svg class="w-6 h-6 text-blue-500 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+                Informasi Kegiatan
+            </h3>
+        </div>
+        
+        <!-- Description -->
+        <div class="prose max-w-none">
+            <h4 class="text-xl font-semibold text-gray-800 mb-4">Keterangan</h4>
+            <p class="text-gray-600 leading-relaxed mb-4">
+                {{ kegiatan.eventKET }}
+            </p>
+        </div>
+    </div>
+{% include "component/footer.html"%}
+{% endblock content %}

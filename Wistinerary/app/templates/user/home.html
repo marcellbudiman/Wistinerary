@@ -1,0 +1,527 @@
+{% extends "component/base.html" %} 
+
+{% block title %}Home{% endblock %} 
+{% block content %} 
+{% include "component/navbar.html" %} 
+{% load static %}
+<!-- Section swiper destinasi -->
+<div class="container container-swiper">
+  <p class="title-swiper">Destinasi Terpopuler</p>
+
+  <!-- Slider destinasi -->
+  <div class="relative p-8 rounded-xl destinasi-swiper-container">
+    
+    <!-- Swipper Buttons -->
+    <div class="swiper-button-prev swiper-left">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+        <path d="M32 15H3.41l8.29-8.29-1.41-1.42-10 10a1 1 0 0 0 0 1.41l10 10 1.41-1.41L3.41 17H32z" data-name="4-Arrow Left"/>
+      </svg>
+    </div>
+
+    <div class="swiper-button-next swiper-right">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+        <path d="m31.71 15.29-10-10-1.42 1.42 8.3 8.29H0v2h28.59l-8.29 8.29 1.41 1.41 10-10a1 1 0 0 0 0-1.41z" data-name="3-Arrow Right"/>
+      </svg>
+    </div>
+
+    <!-- Swiper Container -->
+    <div class="swiper mySwiper overflow-hidden pb-12">
+      <div class="swiper-wrapper">
+        
+        {% for obyek in destinasi %}
+            <!-- Card Destinasi -->
+            <div class="container-card-swiper swiper-slide border border-gray-50 rounded-xl">
+              
+              <!-- Image -->
+              <div class="w-full h-48">
+                {% if obyek.obyekFOTO %}
+                  <img 
+                    src="/media/obyekwisata/{{ obyek.obyekFOTO }}" 
+                    alt="{{ obyek.obyekNAMA }}" 
+                    class="w-full h-full object-cover rounded-t-xl">
+                {% else %}
+                  <img
+                    src="{% static 'images/notfound.png' %}"
+                    alt="Foto Tidak Ditemukan"
+                    class="w-full h-full object-cover rounded-t-xl"/>
+                {% endif %}
+              </div>
+
+              <!-- Content -->
+              <div class="container-contain-swiper">
+
+                  <!-- Title & Rating -->
+                  <div class="flex items-start justify-between mb-3 h-16">
+                    <p class="card-title">
+                      {{ obyek.obyekNAMA }}
+                    </p>
+                    <div class="container-rating">
+                      <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                      </svg>
+                      <span class="rating-span">{{ obyek.obyekPOPULARITAS }}/5</span>
+                    </div>
+                  </div>
+
+                  <!-- Category Badge -->
+                  <span class="category-span">
+                    {{ obyek.kategoriKODE.kategoriwisataNAMA }}
+                  </span>
+
+                  <!-- Location -->
+                  <div class="additional-information-container">
+                    <svg class="w-4 h-4 text-gray-400 mr-2 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+                    </svg>
+                    <p class="additional-information-text">
+                      {{ obyek.obyekALAMAT }}
+                    </p>
+                  </div>
+
+
+                <!-- Button -->
+                <div class="button-container">
+                  <a href="{% url 'detaildestinasi' obyek.obyekKODE %}" 
+                     class="button">
+                    Lihat Detail
+                  </a>
+                </div>
+              </div>
+              
+            </div>
+            <!-- End Card Destinasi -->
+        {% endfor %}
+      </div>
+    </div>
+    <!-- Pagination -->
+    <div class="swiper-pagination !mt-10"></div>
+  </div>
+</div>
+
+<!--Section swiper kegiatan-->
+<div class="container container-swiper">
+  <p class="title-swiper">Kegiatan Terkini</p>
+
+  <!-- Slider -->
+  <div class="relative p-8 rounded-xl kegiatan-swiper-container">
+
+    <!-- Swipper Buttons -->
+    <div class="swiper-button-prev swiper-left">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+        <path
+          d="M32 15H3.41l8.29-8.29-1.41-1.42-10 10a1 1 0 0 0 0 1.41l10 10 1.41-1.41L3.41 17H32z"
+          data-name="4-Arrow Left" />
+      </svg>
+    </div>
+
+    <div class="swiper-button-next swiper-right">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+        <path
+          d="m31.71 15.29-10-10-1.42 1.42 8.3 8.29H0v2h28.59l-8.29 8.29 1.41 1.41 10-10a1 1 0 0 0 0-1.41z"
+          data-name="3-Arrow Right" />
+      </svg>
+    </div>
+
+    <!-- Swiper Container -->
+    <div class="swiper mySwiper overflow-hidden pb-12">
+      <div class="swiper-wrapper">
+
+        {% for obyek in kegiatan %}
+        <!--Card kegiatan -->
+        <div class="container-card-swiper swiper-slide border border-gray-50 rounded-xl">
+
+            <!-- Image -->
+            <div class="w-full h-48 rounded-t-xl">
+              {% if obyek.eventPOSTER %}
+              <img
+                src="/media/kegiatan/{{ obyek.eventPOSTER }}"
+                alt="{{ obyek.eventNAMA }}"
+                class="w-full h-full object-cover rounded-t-xl"/>
+              {% else %}
+              <img
+                src="{% static 'images/notfound.png' %}"
+                alt="Foto Tidak Ditemukan"
+                class="w-full h-full object-cover rounded-t-xl"/>
+              {% endif %}
+            </div>
+
+            <!-- Content -->
+            <div class="container-contain-swiper">
+              
+                <div class="flex items-start justify-between mb-3 h-16">
+                  <p class="card-title">
+                    {{ obyek.eventNAMA }}
+                  </p>
+                </div>
+
+                <span
+                  class="category-span">
+                  {{ obyek.eventMULAI }} - {{ obyek.eventSELESAI }}
+                </span>
+
+                <div class="additional-information-container">
+                  <svg
+                    class="w-4 h-4 text-gray-400 mr-2 mt-0.5 flex-shrink-0"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24">
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                  </svg>
+                  <p class="additional-information-text">
+                    {{ obyek.eventKET }}
+                  </p>
+                </div>
+
+
+              <div class="button-container">
+                <a href="{% url 'detailkegiatan' obyek.eventKODE %}">
+                  <button
+                    class="button">
+                    Lihat Detail
+                  </button>
+                </a>
+              </div>
+            </div>
+          
+        </div>
+        <!-- End card kegiatan -->
+        {% endfor %}
+      </div>
+    </div>
+    <!-- Navigation-->
+    <div class="swiper-pagination"></div>
+  </div>
+</div>
+
+<!-- Search Section -->
+<div class="container-search mx-auto px-4 py-12 mt-8">
+    <!-- Search Header -->
+    <div class="container-text">
+
+      <p class="title">
+        Temukan Destinasi Impian Anda
+      </p>
+      <p class="subtitle">
+        Jelajahi ribuan destinasi wisata menarik di Indonesia
+      </p>
+
+    </div>
+
+    <!-- Search Bar -->
+    <div class="flex justify-center mb-8">
+
+      <form method="GET" action="{% url 'home' %}" class="relative w-full max-w-3xl">
+          <div class="search-svg">
+            <svg class="w-6 h-6 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-4.35-4.35m0 0A7.5 7.5 0 1010.5 18a7.5 7.5 0 006.15-3.35z" />
+            </svg>
+          </div>
+
+          <input
+            type="text"
+            name="searchdestinasi"
+            placeholder="Cari destinasi..."
+            class="placeholder"
+            value="{{ request.GET.searchdestinasi|default:'' }}"/>
+          <button
+            type="submit"
+            class="button">
+            <span class="hidden md:flex items-center"> Cari </span>
+          </button>
+
+      </form>
+    </div>
+</div>
+
+<!-- Search Results -->
+{% if results %}
+<div class="container container-search-result mx-auto px-4 pb-12 bg-white rounded-2xl shadow-xl p-8">
+    <!-- Results Header -->
+    <div class="container-title">
+        <h3 class="title">Hasil Pencarian</h3>
+        <p class="text-gray-600">
+          Ditemukan {{ results|length }} destinasi untuk {{request.GET.searchdestinasi}}
+        </p>
+    </div>
+    <!-- Results Header -->
+
+    <!-- Results Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      {% for destinasi in results %}
+      <div class="container-card-swiper swiper-slide border border-gray-50 rounded-xl">
+        <!-- Image -->
+        <div class="w-full h-48">
+          {% if destinasi.obyekFOTO %}
+          <img
+            src="/media/obyekwisata/{{ destinasi.obyekFOTO }}"
+            alt="{{ destinasi.obyekNAMA }}"
+            class="w-full h-full object-cover rounded-t-xl" />
+          {% else %}
+          <img
+            src="{% static 'images/notfound.png' %}"
+            alt="Foto Tidak Ditemukan"
+            class="w-full h-full object-cover rounded-t-xl"/>
+          {% endif %}
+        </div>
+        <!-- Image -->
+
+        <!-- Content -->
+        <div class="container-contain-swiper">
+          <div class="flex items-start justify-between mb-3">
+            <h4 class="card-title">
+              {{ destinasi.obyekNAMA }}
+            </h4>
+            <div class="container-rating">
+              <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                <path
+                  d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+              </svg>
+              <span class="rating-span">{{ destinasi.obyekPOPULARITAS }}/5</span>
+            </div>
+          </div>
+        
+          <!-- Category Badge -->
+          <span class="category-span">
+            {{ destinasi.kategoriKODE.kategoriwisataNAMA }}
+          </span>
+          <!-- Category Badge -->
+
+          <!-- Location -->
+          <div class="additional-information-container">
+            <svg class="w-4 h-4 text-gray-400 mr-2 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+            </svg>
+            <p class="additional-information-text">
+              {{ destinasi.obyekALAMAT }}
+            </p>
+          </div>
+          <!-- Location -->
+
+          <!-- Button -->
+          <div class="button-container">
+            <a href="{% url 'detaildestinasi' destinasi.obyekKODE %}" class="button"> 
+              Lihat Detail
+            </a>
+          </div>
+          <!-- Button -->
+
+        <!-- Content -->
+        </div>
+      </div>
+      {% empty %}
+      <div class="col-span-full text-center py-12">
+        <div class="text-6xl mb-4">🔍</div>
+        <h3 class="text-xl font-semibold text-gray-700 mb-2">
+          Tidak ada destinasi ditemukan
+        </h3>
+        <p class="text-gray-500">
+          Coba kata kunci yang berbeda atau jelajahi destinasi populer kami
+        </p>
+      </div>
+      {% endfor %}
+    </div>
+</div>
+{% endif %}
+
+<!-- Section Buat Rute Perjalanan -->
+<div class="container container-banner-1 mx-auto mt-6 mb-6 bg-white">
+    <div class="container-grid">
+      <!-- Left Side - Foto Destinasi -->
+      <div class="image-section">
+          <img src="{% static 'images/Malcha Mengajak GIF.gif' %}" alt />
+      </div>
+      <!-- Left Side - Foto Destinasi -->
+
+      <!-- Right Side - Buat Rute -->
+      <div class="text-section">
+        <div class="text-center max-w-sm">
+
+          <p class="title">
+            Buat rute perjalanan sekarang
+          </p>
+          <p class="subtitle">
+            Rencanakan perjalanan impian Anda dengan mudah. Pilih destinasi
+            favorit dan buat rute yang sempurna.
+          </p>
+
+          <!-- Call to Action Button -->
+          <a href="{% url 'itineraryform' %}" class="button">
+              <span class="mr-2">🗺️</span>
+              Buat rute perjalanan anda
+          </a>
+
+        </div>
+      </div>
+      <!-- Right Side - Buat Rute -->
+
+    </div>
+</div>
+
+<!-- Section Banner -->
+<div class="container-banner-2 bg-green-900 py-20 px-6 relative overflow-hidden m-2.5">
+  <div class="container mx-auto px-8 py-6 mt-2 max-w-7xl relative z-10">
+
+      <div class="grid lg:grid-cols-2 gap-12 items-center">
+        <!-- Left Side - Text Content -->
+        <div class="text-section">
+          <!-- Main Heading -->
+          <!-- <div class="space-y-4"> -->
+            <h1 class="text-5xl title pb-4">
+              Wistinerary
+            </h1>
+            <h2 class="text-4xl title pb-4">
+              Rencanakan Lebih Cerdas, Jelajahi Lebih Jauh !
+            </h2>
+          <!-- </div> -->
+
+          <!-- Subtitle -->
+          <p class="text-xl text-white max-w-lg leading-relaxed">
+            Temukan destinasi impian, buat itinerary yang sempurna, dan nikmati
+            perjalanan tak terlupakan.
+          </p>
+
+          <!-- Action Buttons -->
+          <a href="{% url 'itineraryform' %}">
+            <button
+              class="bg-green-500 text-white font-semibold py-4 px-8 rounded-full transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1 mx-auto">
+              Mulai Sekarang
+            </button>
+          </a>
+        </div>
+
+        <!-- Main image container with curved edges like your reference -->
+        <div
+          class="relative w-full h-full rounded-3xl overflow-hidden shadow-2xl z-10">
+          <!-- Your image here - replace with actual waterfall image -->
+          <img
+            src="{% static 'images/pemandanganwallpaper.jpg' %}"
+            class="w-full h-full object-cover relative z-10" />
+        </div>
+      </div>
+
+  </div>
+</div>
+
+<!-- Section swiper berita -->
+<div class="container mx-auto px-4 py-8">
+  <h2 class="text-4xl font-bold text-blue-primary pl-10">Berita Terkini</h2>
+
+  <!-- Slider -->
+  <div class="relative p-8 rounded-xl berita-swiper-container">
+    <!-- Navigation Buttons -->
+    <div
+      class="swiper-button-prev absolute left-2 top-1/2 transform -translate-y-1/2 z-10 bg-white rounded-full w-10 h-10 flex items-center justify-center shadow-lg hover:bg-gray-50 cursor-pointer p-3">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+        <path
+          d="M32 15H3.41l8.29-8.29-1.41-1.42-10 10a1 1 0 0 0 0 1.41l10 10 1.41-1.41L3.41 17H32z"
+          data-name="4-Arrow Left" />
+      </svg>
+    </div>
+    <div
+      class="swiper-button-next absolute right-2 top-1/2 transform -translate-y-1/2 z-10 bg-white rounded-full w-10 h-10 flex items-center justify-center shadow-lg hover:bg-gray-50 cursor-pointer p-3">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+        <path
+          d="m31.71 15.29-10-10-1.42 1.42 8.3 8.29H0v2h28.59l-8.29 8.29 1.41 1.41 10-10a1 1 0 0 0 0-1.41z"
+          data-name="3-Arrow Right" />
+      </svg>
+    </div>
+
+    <div class="swiper mySwiper overflow-hidden pb-16">
+      <div class="swiper-wrapper">
+        {% for obyek in berita %}
+        <!-- Card 1 -->
+        <div class="swiper-slide">
+          <div
+            class="bg-white border border-gray-200 rounded-2xl shadow-md overflow-hidden h-auto max-h">
+            <!-- Image -->
+            {% if obyek.beritaICONFOTO %}
+            <img
+              src="/media/berita/{{ obyek.beritaICONFOTO }}"
+              alt="{{ obyek.beritaJUDUL }}"
+              class="w-full h-full object-cover"
+              style="
+                height: 700px;
+                object-fit: contain;
+                background-color: oklch(96.7% 0.003 264.542);
+              " />
+            {% else %}
+            <div
+              class="w-full h-full bg-gradient-to-br from-green-400 to-blue-500 flex items-center justify-center text-white text-4xl">
+              🎉
+            </div>
+            {% endif %}
+
+            <!-- Content -->
+            <div class="p-8">
+              <!-- Date Badge -->
+              <div class="mb-4">
+                <span
+                  class="inline-flex items-center bg-gradient-to-r from-blue-100 to-green-100 text-blue-800 text-sm px-4 py-2 rounded-full font-semibold border border-blue-200">
+                  <svg
+                    class="w-4 h-4 mr-2"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24">
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                  </svg>
+                  {{ obyek.beritaTGL }}
+                </span>
+              </div>
+
+              <!-- Title -->
+              <h3
+                class="text-xl font-bold text-gray-800 group-hover:text-green-600 transition-colors duration-300 mb-4 leading-tight">
+                {{ obyek.beritaJUDUL }}
+              </h3>
+
+              <!-- Content with Icon -->
+              <div class="flex items-start mb-6">
+                <div class="bg-gray-100 rounded-lg p-2 mr-3 flex-shrink-0">
+                  <svg
+                    class="w-5 h-5 text-gray-500"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24">
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                  </svg>
+                </div>
+                <p class="text-gray-600 leading-relaxed text-base">
+                  {{ obyek.beritaISI }}
+                </p>
+              </div>
+            </div>
+
+            <div class="mb-10" style="margin-left: 40px">
+              <a href="{% url 'detailberita' obyek.beritaKODE %}">
+                <button
+                  class="bg-green-500 text-white px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300 shadow-md hover:shadow-lg transform hover:-translate-y-0.5">
+                  Lihat Detail
+                </button>
+              </a>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+      <!-- Navigation Pagination -->
+      <div class="swiper-pagination mt-8"></div>
+    </div>
+  </div>
+</div>
+
+{% include "component/footer.html"%}
+{% endblock content %}

@@ -1,0 +1,206 @@
+{% extends "component/base.html" %}
+
+{% block title %}{{ dict_map.judul }} - Itinerary Map{% endblock %}
+
+{% block content %}
+{% load static %}
+{% include "component/navbar.html" %}
+
+<div class="container mx-auto px-4 py-8">
+    <!-- Header -->
+    <div class="p-6 mb-6 rounded-lg border-2">
+        <h1 class="text-3xl font-bold mb-2 text-black">{{ dict_map.judul }}</h1>
+        <div class="flex gap-4 text-gray-500 mt-3">
+            <p>📅 <strong>Tanggal:</strong> {{ dict_map.tanggal|date:"j F Y" }}</p>
+        </div>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 border-2 rounded-lg">
+        <!-- Sidebar Itinerary -->
+        <div class="col-span-1">
+            <div class="p-6 overflow-y-auto" style="max-height: 700px;">
+                {% if dict_map.warning %}
+                <div class="mb-6 p-4 rounded-lg bg-yellow-50 border-l-4 border-yellow-500">
+                    <p class="text-yellow-300 text-base">
+                        {{ dict_map.warning }}
+                    </p>
+                </div>
+                {% endif %}
+
+                <h2 class="text-3xl font-bold mb-4 text-black"> Daftar Destinasi</h2>
+                
+                <!-- Rute Perjalanan -->
+                <div class="space-y-4">
+                    {% for day_data in dict_map.rute %}
+                        <div class="border-blue-500 pl-4 py-2">
+                            <h3 class="font-semibold text-black mb-2 text-xl">Hari {{ day_data.hari }}</h3>
+                            <p class="text-lg text-gray-500 mb-3">
+                                ⏱️ {{ day_data.jam_mulai|time:"H:i" }} - {{ day_data.jam_selesai|time:"H:i" }}
+                            </p>
+                            
+                            {% if day_data.start_location %}
+                            <div class="rounded-lg p-3 mb-2 bg-gray-50">
+                                <div class="flex items-start">
+                                    <div class="bg-blue-600 text-white rounded-full w-8 h-8 flex items-center justify-center text-xs font-bold mr-3 flex-shrink-0">
+                                        1
+                                    </div>
+                                    <div class="flex-1">
+                                        <h4 class="font-medium text-black text-lg">{{ day_data.start_location.obyekNAMA }}</h4>
+                                        <p class="text-base text-gray-500 mt-1">{{ day_data.start_location.kategoriKODE.kategoriwisataNAMA }}</p>
+                                        <div class="mt-2 bg-blue-50 p-2 rounded">
+                                            <p class="text-base text-blue-600 font-semibold">
+                                                Mulai: {{ day_data.jam_mulai|time:"H:i" }}
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endif %}
+                            
+                            {% for rute_detail in day_data.rute %}
+                            {% if rute_detail.obyek_tujuan %}
+                            <div class="bg-gray-50 rounded-lg p-3 mb-2">
+                                <div class="flex items-start">
+                                    <div class="bg-blue-600 text-white rounded-full w-8 h-8 flex items-center justify-center text-xs font-bold mr-3 flex-shrink-0">
+                                        {{ forloop.counter|add:1 }}
+                                    </div>
+                                    <div class="flex-1">
+                                        <h4 class="font-medium text-black text-lg">{{ rute_detail.obyek_tujuan.obyekNAMA }}</h4>
+                                        <p class="text-base text-gray-500 mt-1">{{ rute_detail.obyek_tujuan.kategoriKODE.kategoriwisataNAMA }}</p>
+                                        
+                                        <!-- Waktu Kunjungan -->
+                                        <div class="mt-2 bg-blue-50 p-2 rounded">
+                                            <p class="text-base text-blue-600 font-semibold">
+                                                🕐 {{ rute_detail.jam_mulai|time:"H:i" }} - {{ rute_detail.jam_selesai|time:"H:i" }}
+                                            </p>
+                                        </div>
+                                        
+                                        {% if rute_detail.obyek_asal %}
+                                        <p class="text-base text-gray-500 mt-1">
+                                            📍 Dari: {{ rute_detail.obyek_asal.obyekNAMA }}
+                                        </p>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                            {% endif %}
+                            {% endfor %}
+                        </div>
+                    {% endfor %}
+
+                    <!-- Destinasi yang tidak bisa dikunjungi -->
+                    {% if dict_map.skip_destination %}
+                    <div class="border-l-4 border-red-500 pl-4 py-2">
+                        <h3 class="font-semibold text-red-500 mb-3">❌ Destinasi Tidak Dikunjungi</h3>
+                        {% for obyek in dict_map.skip_destination %}
+                            <div class="bg-red-50 rounded-lg p-3 mb-2">
+                                <div class="flex items-start">
+                                    <div class="flex-1">
+                                        <h4 class="font-medium text-black text-lg">{{ obyek.obyekKODE.obyekNAMA }}</h4>
+                                        <p class="text-base text-gray-500 mt-1">{{ obyek.obyekKODE.kategoriKODE.kategoriwisataNAMA }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                </div>
+
+                <!-- Statistik -->
+                <div class="mt-6 pt-6 border-t">
+                    <h3 class="font-semibold text-gray-700 mb-3 text-3xl">📊 Statistik</h3>
+                    <div class="grid grid-cols-2 gap-3">
+                        <div class="bg-blue-50 rounded-lg p-3 text-center">
+                            <p class="text-base text-gray-600">Total Hari</p>
+                            <p class="text-2xl font-bold text-blue-600">{{ dict_map.rute|length }}</p>
+                        </div>
+                        <div class="bg-green-50 rounded-lg p-3 text-center">
+                            <p class="text-base text-gray-600">Destinasi</p>
+                            <p class="text-2xl font-bold text-green-600">{{ dict_map.jumlah_destinasi }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Map Section -->
+        <div class="col-span-2">
+            <div class="bg-white rounded-lg shadow-lg p-4" style="height: 700px;">
+                <div class="mb-3">
+                    <h2 class="text-3xl font-bold text-gray-800">🗺️ Peta Rute Perjalanan</h2>
+                </div>
+                
+                <!-- Folium Map Container -->
+                <div id="map-container" class="rounded-lg overflow-hidden border-2 border-gray-200" style="height: calc(100% - 60px);">
+                    <!-- Loading State -->
+                    <div id="map-loading" class="flex flex-col items-center justify-center h-full bg-gray-50">
+                        <div class="animate-spin rounded-full h-16 w-16 border-b-4 border-blue-600 mb-4"></div>
+                        <img src="{% static 'images/Malcha Loading GIF.gif' %}" alt="Loading..." style="width: 200px; height: 150px; margin: 0 auto;">
+                        <p class="text-gray-600 font-semibold text-lg">Memuat peta...</p>
+                        <p class="text-gray-500 text-sm mt-2">Mohon tunggu sebentar</p>
+                    </div>
+                    
+                    <!-- Map akan dimuat di sini -->
+                    <div id="map-content" style="display: none; height: 100%;"></div>
+                    
+                    <!-- Error State -->
+                    <div id="map-error" style="display: none;" class="flex flex-col items-center justify-center h-full bg-red-50">
+                        <div class="text-red-600 text-6xl mb-4">⚠️</div>
+                        <p class="text-red-600 font-semibold text-lg">Gagal memuat peta</p>
+                        <p class="text-gray-600 text-sm mt-2">Silakan refresh halaman</p>
+                        <button onclick="loadMap()" class="mt-4 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">
+                            Coba Lagi
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Load map secara asynchronous
+function loadMap() {
+    const mapLoading = document.getElementById('map-loading');
+    const mapContent = document.getElementById('map-content');
+    const mapError = document.getElementById('map-error');
+    
+    // Show loading
+    mapLoading.style.display = 'flex';
+    mapContent.style.display = 'none';
+    mapError.style.display = 'none';
+    
+    // Fetch map data
+    fetch('{% url "itinerarymapdata" hasil_kode %}')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data.success) {
+                // Hide loading, show map
+                mapLoading.style.display = 'none';
+                mapContent.style.display = 'block';
+                mapContent.innerHTML = data.map_html;
+            } else {
+                throw new Error(data.error || 'Unknown error');
+            }
+        })
+        .catch(error => {
+            console.error('Error loading map:', error);
+            // Hide loading, show error
+            mapLoading.style.display = 'none';
+            mapError.style.display = 'flex';
+        });
+}
+
+// Auto load map when page is ready
+document.addEventListener('DOMContentLoaded', function() {
+    loadMap();
+});
+</script>
+
+{% include "component/footer.html" %}
+{% endblock content %}

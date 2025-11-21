@@ -1,0 +1,84 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<html>
+<head>
+    <title>{% block title %}Wistinenary{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'dist/styles.css' %}">
+    <link href="https://cdn.jsdelivr.net/npm/flowbite@2.5.2/dist/flowbite.min.css" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+</head>
+<body>
+  <!--Style Table-->
+  <style>
+    /* warna baris ganjil */
+    table tbody tr:nth-child(odd) {
+      background-color: #ffffff; /* putih */
+    }
+
+    /* warna baris genap */
+    table tbody tr:nth-child(even) {
+      background-color: #f9fafb; /* abu-abu muda (mirip gray-100) */
+    }
+
+    /* warna saat hover */
+    table tbody tr:hover {
+      background-color: #e5e7eb; /* mirip gray-200 */
+    }
+  </style>
+
+  {% block navbar %}
+    {% include "component/navbar_admin.html" %}
+  {% endblock navbar %}
+
+  <div class="p-4 sm:ml-64" style="margin-top:15px;">
+    {% block content %}{% endblock content %}
+  </div>
+<script src="https://cdn.jsdelivr.net/npm/flowbite@2.5.2/dist/flowbite.min.js"></script>
+
+<script>
+  // Blok shortcut zoom (Ctrl/Cmd + + / - / 0)
+  document.addEventListener('keydown', function (event) {
+    if ((event.ctrlKey || event.metaKey) && 
+        (event.key === '+' || event.key === '-' || event.key === '=' || event.key === '0')) {
+      event.preventDefault();
+      return false;
+    }
+  });
+
+  // Blok zoom pakai scroll + Ctrl
+  window.addEventListener('wheel', function (event) {
+    if (event.ctrlKey) {
+      event.preventDefault();
+    }
+  }, { passive: false });
+
+  // Reset zoom ke 100% setiap kali berubah (anti Ctrl+scroll/shortcut)
+  window.addEventListener('resize', function () {
+    document.body.style.zoom = '100%';
+  });
+
+  // Paksa zoom tetap 100% saat load
+  document.body.style.zoom = '100%';
+
+  //hide alert success or failed
+  // Auto hide alert setelah 3 detik
+  setTimeout(function() {
+    const alerts = document.querySelectorAll(".alert");
+    alerts.forEach(alert => {
+      alert.classList.add("opacity-0");
+      setTimeout(() => alert.remove(), 700); // hilang setelah animasi
+    });
+  }, 3000);
+
+  //script delete
+
+  function confirmDelete() {
+      return confirm("Apakah Anda yakin ingin menghapus data ini?");
+  }
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,354 @@
+{% extends "component/base.html" %}
+
+{% block title %}Form Itinerary{% endblock %}
+
+{% block content %}
+{% load static %}
+{% include "component/navbar.html" %}
+
+<div class="max-w-7xl mx-auto px-4 py-8">
+    <div class="bg-white rounded-lg border p-8 min-h-screen" >
+        <h1 class="text-3xl font-bold text-gray-800 mb-6 text-center">Make Your Own Itinerary</h1>
+
+        <form method="POST" action="{% url 'itineraryform' %}" class="space-y-6" onsubmit="return showLoading()">
+            {% csrf_token %}
+            <!-- Pesan Error / Success -->
+            {% if messages %}
+              <div class="w-full max-w-xs mx-auto mt-4">
+                  {% for message in messages %}
+                      <div id="message-{{ forloop.counter }}" 
+                            class="message-alert p-4 mb-4 rounded-xl shadow-lg transform transition-all duration-500 ease-in-out opacity-100 translate-y-0 border
+                                  {% if message.tags == 'error' %} bg-red-50 border-red-200 text-red-800 border-l-4 border-l-red-500
+                                  {% elif message.tags == 'success' %} bg-green-50 border-green-200 text-green-800 border-l-4 border-l-green-500
+                                  {% else %} bg-gray-50 border-gray-200 text-gray-800 border-l-4 border-l-gray-500 {% endif %}">
+                          
+                          <div class="flex items-start">
+                              <!-- Icon -->
+                              <div class="flex-shrink-0 mr-3">
+                                  {% if message.tags == 'error' %}
+                                      <div class="w-8 h-8 bg-red-500 rounded-full flex items-center justify-center">
+                                          <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
+                                          </svg>
+                                      </div>
+                                  {% elif message.tags == 'success' %}
+                                      <div class="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center">
+                                          <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                                          </svg>
+                                      </div>
+                                  {% else %}
+                                      <div class="w-8 h-8 bg-gray-500 rounded-full flex items-center justify-center">
+                                          <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                              <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/>
+                                          </svg>
+                                      </div>
+                                  {% endif %}
+                              </div>
+                              
+                              <!-- Message Content -->
+                              <div class="flex-1">
+                                  <p class="font-semibold text-sm
+                                          {% if message.tags == 'error' %} text-red-800
+                                          {% elif message.tags == 'success' %} text-green-800
+                                          {% else %} text-gray-800 {% endif %}">
+                                      {% if message.tags == 'error' %}
+                                          Error
+                                      {% elif message.tags == 'success' %}
+                                          Berhasil!
+                                      {% else %}
+                                          Pemberitahuan!
+                                      {% endif %}
+                                  </p>
+                                  <p class="text-sm mt-1 
+                                          {% if message.tags == 'error' %} text-red-700
+                                          {% elif message.tags == 'success' %} text-green-700
+                                          {% else %} text-gray-700 {% endif %}">
+                                      {{ message }}
+                                  </p>
+                              </div>
+                              
+                              <!-- Close Button -->
+                              <button onclick="hideMessage('message-{{ forloop.counter }}')" 
+                                      class="flex-shrink-0 ml-2 
+                                              {% if message.tags == 'error' %} text-red-400 hover:text-red-600
+                                              {% elif message.tags == 'success' %} text-green-400 hover:text-green-600
+                                              {% elif message.tags == 'warning' %} text-yellow-400 hover:text-yellow-600
+                                              {% elif message.tags == 'info' %} text-blue-400 hover:text-blue-600
+                                              {% else %} text-gray-400 hover:text-gray-600 {% endif %}
+                                              transition-colors duration-200">
+                                  <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                      <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/>
+                                  </svg>
+                              </button>
+                          </div>
+                      </div>
+                  {% endfor %}
+              </div>
+            {% endif %}
+            <!-- Pesan Error / Success -->
+
+            <div class="grid grid-cols-4 items-center gap-4">
+                <label for="judul_perjalanan" class="text-lg font-medium text-gray-700">
+                    Judul Perjalanan
+                </label>
+                <input type="text" name="judul_perjalanan" id="judul_perjalanan"
+                    class="col-span-3 border border-gray-300 rounded-lg p-2.5 text-sm w-full"
+                    placeholder="Masukkan Judul Perjalanan" required maxlength="255">
+            </div>
+
+            <!-- Dropdown Pilihan Hotel -->
+            <div>
+                <label for="hotelSelect" class="block text-lg font-semibold text-gray-700 mb-2">Pilih Hotel</label>
+                <select id="hotelSelect" name="hotel" 
+                    class="w-full border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                    <option value="">-- Pilih Hotel --</option>
+                    {% for hotel in list_object_obyekwisata_hotel %}
+                        <option value="{{ hotel.obyekKODE }}">{{ hotel.obyekNAMA }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <!-- Container untuk Card Hotel -->
+            {% for hotel in list_object_obyekwisata_hotel %}
+            <div id="hotelCard_{{ hotel.obyekKODE }}" class="hidden mt-4 border-2 border-blue-200 rounded-xl overflow-hidden">
+                <div class="md:flex w-full">
+                    <div class="w-32 h-48 flex-shrink-0">
+                        <img src="/media/obyekwisata/{{ hotel.obyekFOTO }}" alt="{{ hotel.obyekNAMA }}" class="w-full h-full object-cover">
+                    </div>
+                    <div class="p-6 flex-1">
+                        <div class="flex items-start justify-between">
+                            <div class="flex-1">
+                                <h3 class="text-2xl font-bold text-gray-800 mb-2">{{ hotel.obyekNAMA }}</h3>
+                                <div class="flex items-center mb-3">
+                                    <svg class="w-5 h-5 text-gray-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+                                    </svg>
+                                    <p class="text-gray-600">{{ hotel.obyekALAMAT }}</p>
+                                </div>
+                            </div>
+                            <div class="ml-4">
+                                <div class="flex items-center bg-yellow-100 px-3 py-2 rounded-lg">
+                                    <svg class="w-5 h-5 text-yellow-500 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                                    </svg>
+                                    <span class="text-lg font-bold text-gray-800">{{ hotel.obyekPOPULARITAS }}/5</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-4 pt-4 border-t border-gray-200">
+                            <div class="flex items-center text-sm text-gray-600">
+                                <svg class="w-5 h-5 text-blue-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+                                </svg>
+                                <span class="font-medium">{{ hotel.kategoriKODE.kategoriwisataNAMA }}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+
+            <div class="grid grid-cols-4 items-center gap-4">
+                <label for="kapasitas_hari" class="text-lg font-medium text-gray-700">
+                    Jumlah Hari
+                </label>
+                <input type="number" name="kapasitas_hari" id="kapasitas_hari"
+                    class="col-span-3 border border-gray-300 rounded-lg p-2.5 text-sm w-full"
+                    placeholder="Masukkan Jumlah Hari" required min="1" max="30">
+            </div>
+
+            <div class="grid grid-cols-4 items-center gap-4">
+                <label for="jam_mulai" class="text-lg font-medium text-gray-700">
+                    Jam Mulai
+                </label>
+                <input type="time" name="jam_mulai" id="jam_mulai"
+                    class="col-span-3 border border-gray-300 rounded-lg p-2.5 text-sm w-full"
+                    required>
+            </div>
+
+            <div class="grid grid-cols-4 items-center gap-4">
+                <label for="jam_selesai" class="text-lg font-medium text-gray-700">
+                    Jam Selesai
+                </label>
+                <input type="time" name="jam_selesai" id="jam_selesai"
+                    class="col-span-3 border border-gray-300 rounded-lg p-2.5 text-sm w-full"
+                    required>
+            </div>
+
+            <!-- Checkbox Obyek Wisata -->
+            <div>
+                <label class="block text-lg font-semibold text-gray-700 mb-3">Pilih Obyek Wisata</label>
+                <div class="space-y-3 overflow-y-auto border border-gray-200 rounded-lg p-4" style="max-height: 250px;">
+                    {% for obyek in list_object_obyekwisata %}
+                    <label class="flex items-start p-3 border border-gray-200 rounded-lg hover:bg-gray-50 cursor-pointer transition-colors">
+                        <input type="checkbox" 
+                               class="obyek-checkbox mt-1 w-5 h-5 text-blue-600 border-gray-300 rounded focus:ring-blue-500" 
+                               value="{{ obyek.obyekKODE }}"
+                               onchange="toggleObyekCard('{{ obyek.obyekKODE }}')">
+                        <div class="ml-3 flex-1">
+                            <div class="flex items-center justify-between">
+                                <span class="font-medium text-gray-800">{{ obyek.obyekNAMA }}</span>
+                                <div class="flex items-center bg-yellow-100 px-2 py-1 rounded">
+                                    <svg class="w-4 h-4 text-yellow-500 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                                    </svg>
+                                    <span class="text-sm font-bold text-gray-800">{{ obyek.obyekPOPULARITAS }}/5</span>
+                                </div>
+                            </div>
+                            <p class="text-sm text-gray-600 mt-1">{{ obyek.obyekALAMAT }}</p>
+                            <p class="text-xs text-gray-500 mt-1">{{ obyek.kategoriKODE.kategoriwisataNAMA }}</p>
+                        </div>
+                    </label>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- Container untuk Card Obyek Wisata Terpilih -->
+            <div id="selectedObyekContainer" class="space-y-4">
+                {% for obyek in list_object_obyekwisata %}
+                <div id="obyekCard_{{ obyek.obyekKODE }}" class="hidden mt-4 bg-gradient-to-br from-green-50 to-white border-2 border-green-200 rounded-xl shadow-md overflow-hidden">
+                    <div class="md:flex w-full">
+                        <div class="w-32 h-48 flex-shrink-0">
+                            <img src="/media/obyekwisata/{{ obyek.obyekFOTO }}" alt="{{ obyek.obyekNAMA }}" class="w-full h-full object-cover">
+                        </div>
+                        <div class="p-6 flex-1 relative">
+                            <div class="flex items-start justify-between">
+                                <div class="flex-1">
+                                    <h3 class="text-2xl font-bold text-gray-800 mb-2">{{ obyek.obyekNAMA }}</h3>
+                                    <div class="flex items-center mb-3">
+                                        <svg class="w-5 h-5 text-gray-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                                d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                                d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+                                        </svg>
+                                        <p class="text-gray-600">{{ obyek.obyekALAMAT }}</p>
+                                    </div>
+                                </div>
+                                <div class="ml-4">
+                                    <div class="flex items-center bg-yellow-100 px-3 py-2 rounded-lg">
+                                        <svg class="w-5 h-5 text-yellow-500 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                                        </svg>
+                                        <span class="text-lg font-bold text-gray-800">{{ obyek.obyekPOPULARITAS }}/5</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mt-4 pt-4 border-t border-gray-200">
+                                <div class="flex items-center text-sm text-gray-600">
+                                    <svg class="w-5 h-5 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                            d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+                                    </svg>
+                                    <span class="font-medium">{{ obyek.kategoriKODE.kategoriwisataNAMA }}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+
+            <!-- Hidden input untuk simpan daftar obyek terpilih -->
+            <input type="hidden" name="selected_obyek" id="selected_obyek">
+            
+            <!-- Tombol Submit -->
+            <div class="flex justify-center pt-4">
+                <button type="submit" 
+                    class="px-8 py-3 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-300 transition-all duration-200 transform hover:scale-105">
+                    <svg class="w-5 h-5 inline-block mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
+                    </svg>
+                    Buat Itinerary
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Overlay Loading -->
+<div id="loading" class="hidden fixed inset-0 bg-black bg-opacity-80 items-center justify-center z-50 flex">
+    <div class="text-center bg-white rounded-lg p-8 shadow-2xl max-w-md mx-4">
+        <img src="{% static 'images/Malcha Loading GIF.gif' %}" alt="Loading..." style="width: 200px; height: 150px; margin: 0 auto;">
+        <p class="text-gray-800 text-lg mt-4 font-semibold">Sedang memproses itinerary...</p>
+        <p class="text-gray-600 text-sm mt-2">Mohon tunggu, jangan tutup halaman ini</p>
+        
+        <!-- Optional: Add a progress bar or spinner for better UX -->
+        <div class="mt-4">
+            <div class="animate-spin inline-block w-6 h-6 border-4 border-current border-t-transparent text-blue-600 rounded-full" role="status">
+                <span class="sr-only">Loading...</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // === Hotel Selection ===
+    const hotelSelect = document.getElementById("hotelSelect");
+    const hotelCards = document.querySelectorAll("[id^='hotelCard_']");
+
+    hotelSelect.addEventListener("change", function() {
+        hotelCards.forEach(card => card.classList.add("hidden"));
+        
+        if (this.value) {
+            const targetCard = document.getElementById("hotelCard_" + this.value);
+            if (targetCard) targetCard.classList.remove("hidden");
+        }
+    });
+
+    // === Obyek Wisata Checkbox Selection ===
+    const selectedObyekInput = document.getElementById("selected_obyek");
+    let selectedObyek = [];
+
+    function toggleObyekCard(kode) {
+        const checkbox = document.querySelector(`input[value="${kode}"]`);
+        const card = document.getElementById("obyekCard_" + kode);
+        
+        if (checkbox.checked) {
+            if (!selectedObyek.includes(kode)) {
+                selectedObyek.push(kode);
+            }
+            if (card) card.classList.remove("hidden");
+        } else {
+            const index = selectedObyek.indexOf(kode);
+            if (index > -1) {
+                selectedObyek.splice(index, 1);
+            }
+            if (card) card.classList.add("hidden");
+        }
+        
+        updateSelectedObyek();
+    }
+
+    function updateSelectedObyek() {
+        selectedObyekInput.value = selectedObyek.join(",");
+    }
+
+    //batasin hari dan jam
+    document.getElementById("kapasitas_hari").addEventListener("input", function() {
+        const max = 30;
+        const min = 1;
+        if (this.value > max) this.value = max;
+        if (this.value < min) this.value = min;
+    });
+
+    function showLoading() {
+        const loading = document.getElementById("loading");
+        loading.classList.remove("hidden");
+        // Force the background style with JavaScript
+        loading.style.backgroundColor = "rgba(0, 0, 0, 0.9)";
+        loading.style.backdropFilter = "blur(2px)";
+        return true;
+    }
+
+    // Alternative: Set styles when page loads
+    document.addEventListener('DOMContentLoaded', function() {
+        const loading = document.getElementById("loading");
+        loading.style.backgroundColor = "rgba(0, 0, 0, 0.9)";
+    });
+</script>
+
+{% include "component/footer.html" %}
+{% endblock content %}

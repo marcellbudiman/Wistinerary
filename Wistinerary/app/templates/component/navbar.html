@@ -1,0 +1,52 @@
+{% load static %}
+<nav class="w-full bg-white shadow">
+  <div class="container mx-auto flex items-center justify-between px-8 py-4">
+    
+    <!-- Logo -->
+    <a href="{% url 'home' %}">
+      <img src="{% static 'images/LogoHorizontal.png' %}" class="h-20" alt="Logo" />
+    </a>
+
+    {% if request.session.user_id %}
+      <div class="flex md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse bg-blue-primary hover:bg-primary-hover"> 
+        <a href="{% url 'logout' %}"> 
+          <button type="button" class="text-white bg-blue-primary focus:ring-4 font-medium text-sm px-4 py-2 text-center">
+              Logout
+          </button> 
+        </a> 
+      </div>
+    {% else %}
+    <div class="flex md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse bg-blue-primary hover:bg-primary-hover"> 
+        <a href="{% url 'login' %}"> 
+          <button type="button" class="text-white bg-blue-primary focus:ring-4 font-medium text-sm px-4 py-2 text-center">
+              Login
+          </button> 
+        </a> 
+      </div>
+    {% endif %}
+
+    <!-- Menu di tengah -->
+        <div class="flex-1 flex justify-center">
+        <ul class="flex space-x-12 text-lg font-semibold">
+            <li class="px-4">
+            <a href="{% url 'home' %}" 
+            class="{% if request.path == '/' %}text-blue-700{% else %}text-gray-900{% endif %}">
+            Home
+            </a>
+            </li>
+            <li class="px-4">
+            <a href="{% url 'itineraryform' %}" 
+            class="{% if request.path == '/itineraryform/' %}text-blue-700{% else %}text-gray-900{% endif %}">
+            Itinerary
+            </a>
+            </li>
+            <li class="px-4">
+            <a href="{% url 'itineraryhistory' %}" 
+            class="{% if request.path == '/itineraryhistory/' %}text-blue-700{% else %}text-gray-900{% endif %}">
+            History</a>
+            </li>
+        </ul>
+        </div>
+
+  </div>
+</nav>

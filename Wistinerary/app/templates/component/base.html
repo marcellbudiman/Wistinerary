@@ -1,0 +1,211 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{% block title %}Wistinenary{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'dist/styles.css' %}">
+    <link href="https://cdn.jsdelivr.net/npm/flowbite@2.5.2/dist/flowbite.min.css" rel="stylesheet">
+      <!-- SwiperJS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.css"/>
+
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+</head>
+<body>
+    <div class="">
+        {% block content %}{% endblock %}
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/flowbite@2.5.2/dist/flowbite.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.js"></script>
+    <script>
+            document.addEventListener('DOMContentLoaded', function() {
+      var swiper = new Swiper(".destinasi-swiper-container .mySwiper", {
+        // Default: 1 slide per view (mobile first)
+        slidesPerView: 1,
+        spaceBetween: 20,
+        
+        // Navigation
+        navigation: {
+          nextEl: ".destinasi-swiper-container .swiper-button-next",
+          prevEl: ".destinasi-swiper-container .swiper-button-prev",
+        },
+        
+        // Pagination
+        pagination: {
+          el: ".destinasi-swiper-container .swiper-pagination",
+          clickable: true,
+        },
+        
+        // Responsive breakpoints
+        breakpoints: {
+          // Mobile (640px and up): 1 card
+          640: {
+            slidesPerView: 1,
+            spaceBetween: 20,
+          },
+          // Tablet (768px and up): 2 cards  
+          768: {
+            slidesPerView: 2,
+            spaceBetween: 24,
+          },
+          // Desktop (1024px and up): 3 cards
+          1024: {
+            slidesPerView: 3,
+            spaceBetween: 30,
+          }
+        },
+        
+        // Auto-scroll (optional)
+        autoplay: {
+          delay: 4000,
+          disableOnInteraction: false,
+        },
+        
+        // Loop through slides
+        loop: true,
+        
+        // Smooth transitions
+        speed: 600,
+      });
+    });
+
+
+    document.addEventListener('DOMContentLoaded', function() {
+      var swiper = new Swiper(".kegiatan-swiper-container .mySwiper", {
+        // Default: 1 slide per view (mobile first)
+        slidesPerView: 1,
+        spaceBetween: 20,
+        
+        // Navigation
+        navigation: {
+          nextEl: ".kegiatan-swiper-container .swiper-button-next",
+          prevEl: ".kegiatan-swiper-container .swiper-button-prev",
+        },
+        
+        // Pagination
+        pagination: {
+          el: ".kegiatan-swiper-container .swiper-pagination",
+          clickable: true,
+        },
+        
+        // Responsive breakpoints
+        breakpoints: {
+          // Mobile (640px and up): 1 card
+          640: {
+            slidesPerView: 1,
+            spaceBetween: 20,
+          },
+          // Tablet (768px and up): 2 cards  
+          768: {
+            slidesPerView: 2,
+            spaceBetween: 24,
+          },
+          // Desktop (1024px and up): 3 cards
+          1024: {
+            slidesPerView: 3,
+            spaceBetween: 30,
+          }
+        },
+        
+        // Auto-scroll (optional)
+        autoplay: {
+          delay: 4000,
+          disableOnInteraction: false,
+        },
+        
+        // Loop through slides
+        loop: true,
+        
+        // Smooth transitions
+        speed: 600,
+      });
+    });
+
+    document.addEventListener('DOMContentLoaded', function() {
+      var swiper = new Swiper(".berita-swiper-container .mySwiper", {
+        // Default: 1 slide per view (mobile first)
+        slidesPerView: 1,
+        spaceBetween: 20,
+        
+        // Navigation
+        navigation: {
+          nextEl: ".berita-swiper-container .swiper-button-next",
+          prevEl: ".berita-swiper-container .swiper-button-prev",
+        },
+        
+        // Pagination
+        pagination: {
+          el: ".berita-swiper-container .swiper-pagination",
+          clickable: true,
+        },
+        
+        // Responsive breakpoints
+        breakpoints: {
+          // Mobile (640px and up): 1 card
+          640: {
+            slidesPerView: 1,
+            spaceBetween: 20,
+          },
+          // Tablet (768px and up): 2 cards  
+          768: {
+            slidesPerView: 1,
+            spaceBetween: 20,
+          },
+          // Desktop (1024px and up): 3 cards
+          1024: {
+            slidesPerView: 1,
+            spaceBetween: 20,
+          }
+        },
+        
+        // Auto-scroll (optional)
+        autoplay: {
+          delay: 4000,
+          disableOnInteraction: false,
+        },
+        
+        // Loop through slides
+        loop: true,
+        
+        // Smooth transitions
+        speed: 600,
+      });
+    });
+
+    // Function to hide message with animation
+        function hideMessage(messageId) {
+            const message = document.getElementById(messageId);
+            if (message) {
+                message.style.opacity = '0';
+                message.style.transform = 'translateY(-20px)';
+                setTimeout(() => {
+                    message.style.display = 'none';
+                }, 500);
+            }
+        }
+
+        // Auto hide messages after 3 seconds (2 seconds + 1 second animation)
+        document.addEventListener('DOMContentLoaded', function() {
+            const messages = document.querySelectorAll('.message-alert');
+            
+            messages.forEach((message, index) => {
+                // Start progress bar animation immediately
+                const progressBar = message.querySelector('.progress-bar');
+                if (progressBar) {
+                    // Small delay to ensure element is rendered
+                    setTimeout(() => {
+                        progressBar.style.width = '0%';
+                    }, 100);
+                }
+                
+                // Auto hide after 3 seconds
+                setTimeout(() => {
+                    hideMessage(message.id);
+                }, 3000);
+            });
+        });
+    </script>
+</body>
+</html>

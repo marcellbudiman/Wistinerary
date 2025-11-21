@@ -1,0 +1,338 @@
+{% extends "component/baseadmin.html" %}
+{% load static %}
+{% block title %}Form Tambah Berita{% endblock %}
+
+{% block content %}
+<div class="max-w">
+    <div class="block border border-gray-200 rounded-lg shadow" style="margin-bottom: 20px;">
+        <!-- Search Bar -->
+        <div class="flex items-center justify-between mb-4 px-4 mt-4">
+            <!-- Kolom kiri: search -->
+            <div class="w-80">
+                <div class="relative">
+                    <div class="absolute inset-y-0 left-3 flex items-center pointer-events-none">
+                        <svg class="w-4 h-4 text-gray-500" fill="none" viewBox="0 0 20 20">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
+                        </svg>
+                    </div>
+                    <input type="text" id="searchInput" placeholder="Cari berita..."
+                        class="block pt-2 pl-10 text-sm border border-gray-300 rounded-lg w-full bg-gray-50 focus:ring-blue-500 focus:border-blue-500">
+                </div>
+            </div>
+
+            <!-- Kolom tengah: judul -->
+            <h2 class="text-2xl font-semibold text-center flex-1">Data Berita</h2>
+
+            <!-- Kolom kanan: kosong sebagai penyeimbang -->
+            <div class="w-80"></div>
+        </div>
+
+        <!--Table-->
+        <div class="block overflow-y-auto" style="max-height: 250px; margin-bottom: 20px;">
+            <table class="text-sm text-left w-full" id="beritaTable">
+                <thead class="sticky top-0 z-10 bg-green-500 text-white">
+                    <tr class="text-center">
+                        <th scope="col" class="px-6 py-3">Kode</th>
+                        <th scope="col" class="px-6 py-3">Judul Berita</th>
+                        <th scope="col" class="px-6 py-3">Isi</th>
+                        <th scope="col" class="px-6 py-3">Kategori Berita</th>
+                        <th scope="col" class="px-6 py-3">Penulis</th>
+                        <th scope="col" class="px-6 py-3">Tanggal</th>
+                        <th scope="col" class="px-6 py-3">Foto</th>
+                        <th scope="col" class="px-6 py-3">Sumber</th>
+                        <th scope="col" class="px-6 py-3" colspan="2">Aksi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for brt in berita %}
+                    <tr class="border-b">
+                        <td class="px-6 py-4 font-medium text-gray-900">{{ brt.beritaKODE }}</td>
+                        <td class="px-6 py-4">
+                            <div title="{{ brt.beritaJUDUL }}">
+                                {{ brt.beritaJUDUL }}
+                            </div>
+                        </td>
+                        <td class="px-6 py-4">{{ brt.beritaISI|default:"N/A" }}</td>
+                        <td class="px-6 py-4">{{ brt.kategoriberitaKODE.kategoriberitaNAMA|default:"N/A" }}</td>
+                        <td class="px-6 py-4">{{ brt.beritaPENULIS|default:"N/A" }}</td>
+                        <td class="px-6 py-4">{{ brt.beritaTGL|date:"d/m/Y"|default:"N/A" }}</td>
+                        <td class="px-6 py-4">
+                            {% if brt.beritaICONFOTO %}
+                                <img src="/media/berita/{{ brt.beritaICONFOTO }}" alt="Foto" class="w-16 h-20 object-cover rounded">
+                            {% else %}
+                                <span class="text-gray-500">No Image</span>
+                            {% endif %}
+                        </td>
+                        <td class="px-6 py-4">
+                            {% if brt.beritaSUMBER %}
+                                <div title="{{ brt.beritaSUMBER }}">{{ brt.beritaSUMBER }}</div>
+                            {% else %}
+                                <span class="text-gray-500">N/A</span>
+                            {% endif %}
+                        </td>
+                        <td class="px-6 py-4">
+                            <a href="{% url 'editberita' brt.beritaKODE %}" class="font-medium text-blue-600 hover:underline">
+                                Ubah
+                            </a>
+                        </td>
+                        <td class="px-6 py-4">
+                            <form action="{% url 'deleteberita' brt.beritaKODE %}" method="post" onsubmit="return confirmDelete();">
+                                {% csrf_token %}
+                                <button type="submit" class="font-medium text-red-600 hover:underline">Hapus</button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="14" class="px-6 py-4 text-center text-gray-500">Belum ada data berita</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+
+    <div class="flex items-center justify-center">
+        <form method="POST" enctype="multipart/form-data" class="w-full bg-white border border-gray-200 rounded-lg shadow p-6" action="{% if edit_berita %}
+                 {% url 'editberita' edit_berita.beritaKODE %}
+               {% else %}
+                 {% url 'tambahberita' %}
+               {% endif %}">
+            {% csrf_token %}
+
+            <!-- Pesan Error / Success -->
+            {% if messages %}
+                <div class="max-w mx-auto mt-4 alert">
+                    {% for message in messages %}
+                        <div id="message-{{ forloop.counter }}" 
+                            class="message-alert p-4 mb-4 rounded-xl shadow-lg transform transition-all duration-500 ease-in-out opacity-100 translate-y-0 border
+                                    {% if message.tags == 'error' %} bg-red-50 border-red-200 text-red-800 border-l-4 border-l-red-500
+                                    {% elif message.tags == 'success' %} bg-green-50 border-green-200 text-green-800 border-l-4 border-l-green-500
+                                    {% else %} bg-gray-50 border-gray-200 text-gray-800 border-l-4 border-l-gray-500 {% endif %}">
+                            
+                            <div class="flex items-start">
+                                <!-- Icon -->
+                                <div class="flex-shrink-0 mr-3">
+                                    {% if message.tags == 'error' %}
+                                        <div class="w-8 h-8 bg-red-500 rounded-full flex items-center justify-center">
+                                            <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
+                                            </svg>
+                                        </div>
+                                    {% elif message.tags == 'success' %}
+                                        <div class="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center">
+                                            <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                                            </svg>
+                                        </div>
+                                    {% else %}
+                                        <div class="w-8 h-8 bg-gray-500 rounded-full flex items-center justify-center">
+                                            <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/>
+                                            </svg>
+                                        </div>
+                                    {% endif %}
+                                </div>
+                                
+                                <!-- Message Content -->
+                                <div class="flex-1">
+                                    <p class="font-semibold text-sm
+                                            {% if message.tags == 'error' %} text-red-800
+                                            {% elif message.tags == 'success' %} text-green-800
+                                            {% else %} text-gray-800 {% endif %}">
+                                        {% if message.tags == 'error' %}
+                                            Error
+                                        {% elif message.tags == 'success' %}
+                                            Berhasil!
+                                        {% else %}
+                                            Pemberitahuan!
+                                        {% endif %}
+                                    </p>
+                                    <p class="text-sm mt-1 
+                                            {% if message.tags == 'error' %} text-red-700
+                                            {% elif message.tags == 'success' %} text-green-700
+                                            {% else %} text-gray-700 {% endif %}">
+                                        {{ message }}
+                                    </p>
+                                </div>
+                                
+                                <!-- Close Button -->
+                                <button onclick="hideMessage('message-{{ forloop.counter }}')" 
+                                        class="flex-shrink-0 ml-2 
+                                                {% if message.tags == 'error' %} text-red-400 hover:text-red-600
+                                                {% elif message.tags == 'success' %} text-green-400 hover:text-green-600
+                                                {% elif message.tags == 'warning' %} text-yellow-400 hover:text-yellow-600
+                                                {% elif message.tags == 'info' %} text-blue-400 hover:text-blue-600
+                                                {% else %} text-gray-400 hover:text-gray-600 {% endif %}
+                                                transition-colors duration-200">
+                                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+            <!-- Pesan Error / Success -->
+            
+            <h2 class="text-center text-2xl font-semibold mb-6">{% if edit_berita %} Edit Berita {% else %} Form Tambah Berita {% endif %}</h2>
+
+            <div class="space-y-4">
+                <!-- Kode -->
+                <div class="grid grid-cols-3 items-center gap-4">
+                    <label for="kode" class="text-sm font-medium text-gray-700">Kode</label>
+                    <input type="text" name="kode" id="kode"
+                        class="col-span-2 border border-gray-300 rounded-lg p-2.5 text-sm w-full focus:ring-blue-500 focus:border-blue-500 bg-gray-200"
+                        placeholder="Masukkan kode berita" value="{% if edit_berita %}{{ edit_berita.beritaKODE }}{% else %}{{ new_kode }}{% endif %}" required readonly maxlength="11">
+                </div>
+
+                <!-- Judul Berita -->
+                <div class="grid grid-cols-3 items-center gap-4">
+                    <label for="judul" class="text-sm font-medium text-gray-700">Judul Berita</label>
+                    <input type="text" name="judul" id="judul"
+                        class="col-span-2 border border-gray-300 rounded-lg p-2.5 text-sm w-full focus:ring-blue-500 focus:border-blue-500"
+                        placeholder="Masukkan judul berita" value="{% if edit_berita %}{{ edit_berita.beritaJUDUL }}{% endif %}" required maxlength="255">
+                </div>
+
+                <!-- Kategori Berita -->
+                <div class="grid grid-cols-3 items-center gap-4">
+                    <label for="kategori" class="text-sm font-medium text-gray-700">Kategori</label>
+                    <select name="kategori" id="kategori" 
+                        class="col-span-2 border border-gray-300 rounded-lg p-2.5 text-sm w-full focus:ring-blue-500 focus:border-blue-500">
+                        <option value="">Pilih kategori (opsional)</option>
+                        {% for kat in kategoriberita %}
+                            <option value="{{ kat.kategoriberitaKODE }}" 
+                                {% if edit_berita and edit_berita.kategoriberitaKODE.kategoriberitaKODE == kat.kategoriberitaKODE %}selected{% endif %}>
+                                {{ kat.kategoriberitaNAMA }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <!-- Kegiatan -->
+                <div class="grid grid-cols-3 items-center gap-4">
+                    <label for="kegiatan" class="text-sm font-medium text-gray-700">Kegiatan</label>
+                    <select name="kegiatan" id="kegiatan" 
+                        class="col-span-2 border border-gray-300 rounded-lg p-2.5 text-sm w-full focus:ring-blue-500 focus:border-blue-500">
+                        <option value="">Pilih kegiatan (opsional)</option>
+                        {% for keg in kegiatan %}
+                            <option value="{{ keg.eventKODE }}" 
+                                {% if edit_berita and edit_berita.eventKODE.eventKODE == keg.eventKODE %}selected{% endif %}>
+                                {{ keg.eventNAMA }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <!-- Obyek Wisata -->
+                <div class="grid grid-cols-3 items-center gap-4">
+                    <label for="obyek" class="text-sm font-medium text-gray-700">Obyek Wisata</label>
+                    <select name="obyek" id="obyek" 
+                        class="col-span-2 border border-gray-300 rounded-lg p-2.5 text-sm w-full focus:ring-blue-500 focus:border-blue-500">
+                        <option value="">Pilih obyek wisata (opsional)</option>
+                        {% for obj in obyekwisata %}
+                            <option value="{{ obj.obyekKODE }}" 
+                                {% if edit_berita and edit_berita.obyekKODE.obyekKODE == obj.obyekKODE %}selected{% endif %}>
+                                {{ obj.obyekNAMA }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <!-- Kabupaten -->
+                <div class="grid grid-cols-3 items-center gap-4">
+                    <label for="kabupaten" class="text-sm font-medium text-gray-700">Kabupaten</label>
+                    <select name="kabupaten" id="kabupaten" 
+                        class="col-span-2 border border-gray-300 rounded-lg p-2.5 text-sm w-full focus:ring-blue-500 focus:border-blue-500">
+                        <option value="">Pilih kabupaten (opsional)</option>
+                        {% for kab in kabupaten %}
+                            <option value="{{ kab.kabupatenKODE }}" 
+                                {% if edit_berita and edit_berita.kabupatenKODE.kabupatenKODE == kab.kabupatenKODE %}selected{% endif %}>
+                                {{ kab.kabupatenNAMA }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <!-- Penulis -->
+                <div class="grid grid-cols-3 items-center gap-4">
+                    <label for="penulis" class="text-sm font-medium text-gray-700">Penulis</label>
+                    <input type="text" name="penulis" id="penulis"
+                        class="col-span-2 border border-gray-300 rounded-lg p-2.5 text-sm w-full focus:ring-blue-500 focus:border-blue-500"
+                        placeholder="Masukkan nama penulis" value="{% if edit_berita %}{{ edit_berita.beritaPENULIS }}{% endif %}" maxlength="60">
+                </div>
+
+                <!-- Tanggal Berita -->
+                <div class="grid grid-cols-3 items-center gap-4">
+                    <label for="tanggal" class="text-sm font-medium text-gray-700">Tanggal Berita</label>
+                    <input type="date" name="tanggal" id="tanggal"
+                        class="col-span-2 border border-gray-300 rounded-lg p-2.5 text-sm w-full focus:ring-blue-500 focus:border-blue-500"
+                        value="{% if edit_berita and edit_berita.beritaTGL %}{{ edit_berita.beritaTGL|date:'Y-m-d' }}{% endif %}">
+                </div>
+
+                <!-- Foto -->
+                <div class="grid grid-cols-3 items-center gap-4">
+                    <label for="foto" class="text-sm font-medium text-gray-700">Foto</label>
+                    <div class="col-span-2">
+                        <input type="file" name="foto" id="foto" accept="image/*"
+                            class="border border-gray-300 rounded-lg p-2.5 text-sm w-full focus:ring-blue-500 focus:border-blue-500">
+                        {% if edit_berita and edit_berita.beritaICONFOTO %}
+                            <div class="mt-2">
+                                <img src="/media/{{ edit_berita.beritaICONFOTO }}" alt="Foto Sekarang" class="w-20 h-24 object-cover rounded border">
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <!-- Sumber -->
+                <div class="grid grid-cols-3 items-center gap-4">
+                    <label for="sumber" class="text-sm font-medium text-gray-700">Sumber</label>
+                    <input type="text" name="sumber" id="sumber"
+                        class="col-span-2 border border-gray-300 rounded-lg p-2.5 text-sm w-full focus:ring-blue-500 focus:border-blue-500"
+                        placeholder="Masukkan sumber berita" value="{% if edit_berita %}{{ edit_berita.beritaSUMBER }}{% endif %}" maxlength="255">
+                </div>
+
+                <!-- Isi Berita -->
+                <div class="grid grid-cols-3 items-start gap-4">
+                    <label for="isi" class="text-sm font-medium text-gray-700">Isi Berita</label>
+                    <textarea name="isi" id="isi" rows="6"
+                        class="col-span-2 border border-gray-300 rounded-lg p-2.5 text-sm w-full focus:ring-blue-500 focus:border-blue-500"
+                        placeholder="Masukkan isi berita">{% if edit_berita %}{{ edit_berita.beritaISI }}{% endif %}</textarea>
+                </div>
+
+                <!-- Isi Berita 2 -->
+                <div class="grid grid-cols-3 items-start gap-4">
+                    <label for="isi2" class="text-sm font-medium text-gray-700">Isi Berita 2</label>
+                    <textarea name="isi2" id="isi2" rows="4"
+                        class="col-span-2 border border-gray-300 rounded-lg p-2.5 text-sm w-full focus:ring-blue-500 focus:border-blue-500"
+                        placeholder="Masukkan isi berita tambahan (opsional)">{% if edit_berita %}{{ edit_berita.beritaISI2 }}{% endif %}</textarea>
+                </div>
+            </div>
+
+            <!-- Tombol -->
+            <div class="flex justify-center mt-6">
+                <button type="submit"
+                    class="px-6 py-2 text-sm font-medium text-white bg-blue-700 rounded-lg shadow hover:bg-blue-800 focus:ring-4 focus:ring-blue-300">
+                    {% if edit_berita %} Update {% else %} Simpan {% endif %}
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Script Search -->
+<script>
+    document.getElementById("searchInput").addEventListener("keyup", function () {
+        let filter = this.value.toLowerCase();
+        let rows = document.querySelectorAll("#beritaTable tbody tr");
+
+        rows.forEach(row => {
+            let text = row.innerText.toLowerCase();
+            row.style.display = text.includes(filter) ? "" : "none";
+        });
+    });
+</script>
+{% endblock content %}

@@ -1,0 +1,74 @@
+{% load static %}
+
+<script src="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.js"></script>
+
+<!-- Footer -->
+<footer class="bg-gray-100 text-black relative mt-8 container-footer">
+    <div class="relative pt-5">
+
+        <!-- Main Footer Content -->
+        <div class="container mx-auto px-6 py-16">
+            <div class="grid grid-cols-5 gap-12">
+                <!-- Brand Section -->
+                <div class="lg:col-span-2">
+                    <div class="mb-6">
+                        <h2 class="text-3xl font-bold text-black">Wistinerary</h2>
+                        <p class="text-black mt-3 text-lg leading-relaxed">
+                            Rencanakan Lebih Cerdas, Jelajahi Lebih Jauh!
+                        </p>
+                    </div>
+                    
+                    <p class="text-black mb-6 leading-relaxed">
+                        Temukan destinasi impian, buat itinerary yang sempurna, dan nikmati perjalanan tak terlupakan bersama Wistinerary.
+                    </p>
+                    
+                </div>
+                
+                <!-- Quick Links -->
+                <div>
+                    <h3 class="text-3xl font-semibold mb-6 text-black">Menu Utama</h3>
+                    <ul class="space-y-3">
+                        <li><a href="{% url 'home' %}" class="text-black">Beranda</a></li>
+                        <li><a href="{% url 'itineraryform' %}" class="text-black">Itinerary</a></li>
+                        <li><a href="{% url 'itineraryhistory' %}" class="text-black">History</a></li>
+                    </ul>
+                </div>
+                
+                <!-- Contact Info -->
+                <div>
+                    <h3 class="text-3xl font-semibold mb-6 text-black">Hubungi Kami</h3>
+                    <ul class="space-y-4 text-black">
+                        <li>
+                            <p class="font-medium text-black">Alamat</p>
+                            <p>Jl. F3 GG.S2 NO.9<br>Kemayoran, Jakarta Pusat 16129</p>
+                        </li>
+                        <li>
+                            <p class="font-medium text-black">Email</p>
+                            <p>info@wistinerary.com</p>
+                        </li>
+                        <li>
+                            <p class="font-medium text-black">Telepon</p>
+                            <p>+62 897-7852-872</p>
+                        </li>
+                    </ul>
+                </div>
+
+                <div>
+                    <img src="{% static 'images/MalchaHome.png' %}" alt="Logo" style="height: 300px"/>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Bottom Footer -->
+        <div class="border-t border-gray-800">
+            <div class="container mx-auto px-6 py-6">
+                <div class="flex flex-col md:flex-row items-center justify-between space-y-4 md:space-y-0">
+                    <div class="text-black text-sm">
+                        <p>&copy; 2025 Wistinerary. Marcell Budiman.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</footer>

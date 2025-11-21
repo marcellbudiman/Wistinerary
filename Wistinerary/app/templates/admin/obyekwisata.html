@@ -1,0 +1,409 @@
+{% extends "component/baseadmin.html" %}
+{% load static %}
+{% block title %}Form Tambah Obyek Wisata{% endblock %}
+
+{% block content %}
+<div class="max-w">
+    <div class="block border border-gray-200 rounded-lg shadow" style="margin-bottom: 20px;">
+        <!-- Search Bar -->
+        <div class="flex items-center justify-between mb-4 px-4 mt-4">
+            <!-- Kolom kiri: search -->
+            <div class="w-80">
+                <div class="relative">
+                    <div class="absolute inset-y-0 left-3 flex items-center pointer-events-none">
+                        <svg class="w-4 h-4 text-gray-500" fill="none" viewBox="0 0 20 20">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
+                        </svg>
+                    </div>
+                    <input type="text" id="searchInput" placeholder="Cari obyek wisata..."
+                        class="block pt-2 pl-10 text-sm border border-gray-300 rounded-lg w-full bg-gray-50 focus:ring-blue-500 focus:border-blue-500">
+                </div>
+            </div>
+
+            <!-- Kolom tengah: judul -->
+            <h2 class="text-2xl font-semibold text-center flex-1">Data Obyek Wisata</h2>
+
+            <!-- Kolom kanan: kosong sebagai penyeimbang -->
+            <div class="w-80"></div>
+        </div>
+
+        <!--Table-->
+        <div class="block overflow-y-auto" style="max-height: 300px; margin-bottom: 20px;">
+            <table class="min-w-full text-sm text-left" id="obyekwisataTable">
+            <thead class="sticky top-0 z-10 text-s bg-green-500 text-white">
+            <tr class="text-center">
+                <th scope="col" class="px-4 py-3">Kode</th>
+                <th scope="col" class="px-4 py-3">Nama Obyek</th>
+                <th scope="col" class="px-4 py-3">Kecamatan</th>
+                <th scope="col" class="px-4 py-3">Kategori</th>
+                <th scope="col" class="px-4 py-3">Alamat</th>
+                <th scope="col" class="px-4 py-3">Jam Operasional</th>
+                <th scope="col" class="px-4 py-3">Popularitas</th>
+                <th scope="col" class="px-4 py-3">Definisi</th>
+                <th scope="col" class="px-4 py-3">Foto</th>
+                <th scope="col" class="px-4 py-3" colspan="2">Aksi</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for obj in obyekwisata %}
+            <tr class="border-b">
+                <td class="px-4 py-4 whitespace-nowrap">
+                    {{ obj.obyekKODE }}
+                </td>
+                <td class="px-4 py-4">
+                    <div class="max-w-xs" title="{{ obj.obyekNAMA }}">
+                        {{ obj.obyekNAMA }}
+                    </div>
+                </td>
+                <td class="px-4 py-4">
+                    {{ obj.kecamatanKODE.kecamatanNAMA|default:"N/A" }}
+                </td>
+                <td class="px-4 py-4">
+                    {{ obj.kategoriKODE.kategoriwisataNAMA|default:"N/A" }}
+                </td>
+                <td class="px-4 py-4">
+                    <div title="{{ obj.obyekALAMAT }}">
+                        {{ obj.obyekALAMAT|default:"N/A" }}
+                    </div>
+                </td>
+               <td class="px-4 py-4 text-center">
+                    {% if obj.obyekJAMBUKA and obj.obyekJAMTUTUP %}
+                        {{ obj.obyekJAMBUKA|time:"H:i" }} - {{ obj.obyekJAMTUTUP|time:"H:i" }}
+                    {% else %}
+                        <span class="text-gray-500">N/A</span>
+                    {% endif %}
+                </td>
+                <td class="px-4 py-4 text-center">
+                    {{ obj.obyekPOPULARITAS|default:"-" }}
+                </td>
+                <td class="px-4 py-4">
+                    {{ obj.obyekKETERANGAN|default:"" }}
+                </td>
+                <td class="px-4 py-4">
+                    {% if obj.obyekFOTO %}
+                        <img src="/media/obyekwisata/{{ obj.obyekFOTO }}" alt="Foto" class="w-40 h-12">
+                    {% else %}
+                        <img src="{% static 'images/notfound.png' %}" alt="Foto Tidak Ditemukan" class="w-20 h-12">
+                    {% endif %}
+                </td>
+                <td class="px-4 py-4">
+                    <a href="{% url 'editobyekwisata' obj.obyekKODE %}" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">
+                        <button type="button">
+                            Ubah
+                        </button>
+                    </a>
+                </td>
+                <td class="px-4 py-4">
+                    <form action="{% url 'deleteobyekwisata' obj.obyekKODE %}" method="post" onsubmit="return confirmDelete();">
+                        {% csrf_token %}
+                        <button type="submit" class="font-medium text-red-600 hover:underline ms-4">
+                            Hapus
+                        </button>
+                    </form>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="11" class="px-6 py-4 text-center text-gray-500 dark:text-gray-400">Belum ada data obyek wisata</td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        </div>
+    </div>
+
+    <div class="flex items-center justify-center">
+        <form method="POST" enctype="multipart/form-data" class="w-full bg-white border border-gray-200 rounded-lg shadow p-6" 
+        action="{% if edit_obyekwisata %}
+                 {% url 'editobyekwisata' edit_obyekwisata.obyekKODE %}
+               {% else %}
+                 {% url 'tambahobyekwisata' %}
+               {% endif %}"
+               >
+            {% csrf_token %}
+
+            <!-- Pesan Error / Success -->
+            {% if messages %}
+                <div class="max-w mx-auto mt-4 alert">
+                    {% for message in messages %}
+                        <div id="message-{{ forloop.counter }}" 
+                            class="message-alert p-4 mb-4 rounded-xl shadow-lg transform transition-all duration-500 ease-in-out opacity-100 translate-y-0 border
+                                    {% if message.tags == 'error' %} bg-red-50 border-red-200 text-red-800 border-l-4 border-l-red-500
+                                    {% elif message.tags == 'success' %} bg-green-50 border-green-200 text-green-800 border-l-4 border-l-green-500
+                                    {% else %} bg-gray-50 border-gray-200 text-gray-800 border-l-4 border-l-gray-500 {% endif %}">
+                            
+                            <div class="flex items-start">
+                                <!-- Icon -->
+                                <div class="flex-shrink-0 mr-3">
+                                    {% if message.tags == 'error' %}
+                                        <div class="w-8 h-8 bg-red-500 rounded-full flex items-center justify-center">
+                                            <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
+                                            </svg>
+                                        </div>
+                                    {% elif message.tags == 'success' %}
+                                        <div class="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center">
+                                            <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                                            </svg>
+                                        </div>
+                                    {% else %}
+                                        <div class="w-8 h-8 bg-gray-500 rounded-full flex items-center justify-center">
+                                            <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/>
+                                            </svg>
+                                        </div>
+                                    {% endif %}
+                                </div>
+                                
+                                <!-- Message Content -->
+                                <div class="flex-1">
+                                    <p class="font-semibold text-sm
+                                            {% if message.tags == 'error' %} text-red-800
+                                            {% elif message.tags == 'success' %} text-green-800
+                                            {% else %} text-gray-800 {% endif %}">
+                                        {% if message.tags == 'error' %}
+                                            Error
+                                        {% elif message.tags == 'success' %}
+                                            Berhasil!
+                                        {% else %}
+                                            Pemberitahuan!
+                                        {% endif %}
+                                    </p>
+                                    <p class="text-sm mt-1 
+                                            {% if message.tags == 'error' %} text-red-700
+                                            {% elif message.tags == 'success' %} text-green-700
+                                            {% else %} text-gray-700 {% endif %}">
+                                        {{ message }}
+                                    </p>
+                                </div>
+                                
+                                <!-- Close Button -->
+                                <button onclick="hideMessage('message-{{ forloop.counter }}')" 
+                                        class="flex-shrink-0 ml-2 
+                                                {% if message.tags == 'error' %} text-red-400 hover:text-red-600
+                                                {% elif message.tags == 'success' %} text-green-400 hover:text-green-600
+                                                {% elif message.tags == 'warning' %} text-yellow-400 hover:text-yellow-600
+                                                {% elif message.tags == 'info' %} text-blue-400 hover:text-blue-600
+                                                {% else %} text-gray-400 hover:text-gray-600 {% endif %}
+                                                transition-colors duration-200">
+                                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+            <!-- Pesan Error / Success -->
+
+            
+            <h2 class="text-center text-2xl font-semibold mb-6">{% if edit_obyekwisata %} Edit Obyek Wisata {% else %} Form Tambah Obyek Wisata {% endif %}</h2>
+                <!-- Column 1 -->
+                <div class="space-y-4">
+                    <!-- Kode -->
+                    <div class="grid grid-cols-3 items-center gap-4">
+                        <label for="kode" class="text-sm font-medium text-gray-700">Kode</label>
+                        <input type="text" name="kode" id="kode"
+                            class="col-span-2 border border-gray-300 rounded-lg p-2.5 text-sm w-full focus:ring-blue-500 focus:border-blue-500 {% if edit_obyekwisata %}bg-gray-200{% endif %}"
+                            placeholder="Masukkan kode obyek" value="{% if edit_obyekwisata %}{{ edit_obyekwisata.obyekKODE }}{% endif %}" required {% if edit_obyekwisata %}disabled{% endif %} maxlength="3">
+                    </div>
+
+                    <!-- Nama Obyek -->
+                    <div class="grid grid-cols-3 items-center gap-4">
+                        <label for="nama" class="text-sm font-medium text-gray-700">Nama Obyek</label>
+                        <input type="text" name="nama" id="nama"
+                            class="col-span-2 border border-gray-300 rounded-lg p-2.5 text-sm w-full focus:ring-blue-500 focus:border-blue-500"
+                            placeholder="Masukkan nama obyek wisata" value="{% if edit_obyekwisata %}{{ edit_obyekwisata.obyekNAMA }}{% endif %}" required maxlength="120">
+                    </div>
+
+                    <!-- Kecamatan -->
+                    <div class="grid grid-cols-3 items-center gap-4">
+                        <label for="kecamatan" class="text-sm font-medium text-gray-700">Kecamatan</label>
+                        <select name="kecamatan" id="kecamatan" 
+                            class="col-span-2 border border-gray-300 rounded-lg p-2.5 text-sm w-full focus:ring-blue-500 focus:border-blue-500
+                                {% if edit_obyekwisata %}bg-gray-200{% endif %}"
+                            {% if edit_obyekwisata %}disabled{% endif %}>
+                            <option value="">Pilih kecamatan</option>
+                            {% for kec in kecamatan %}
+                                <option value="{{ kec.kecamatanKODE }}" 
+                                    {% if edit_obyekwisata and edit_obyekwisata.kecamatanKODE.kecamatanKODE == kec.kecamatanKODE %}selected{% endif %}>
+                                    {{ kec.kecamatanNAMA }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <!-- Kategori -->
+                    <div class="grid grid-cols-3 items-center gap-4">
+                        <label for="kategori" class="text-sm font-medium text-gray-700">Kategori</label>
+                        <select name="kategori" id="kategori" 
+                            class="col-span-2 border border-gray-300 rounded-lg p-2.5 text-sm w-full focus:ring-blue-500 focus:border-blue-500">
+                            <option value="">Pilih kategori</option>
+                            {% for kat in kategoriwisata %}
+                                <option value="{{ kat.kategoriwisataKODE }}"
+                                    {% if edit_obyekwisata and edit_obyekwisata.kategoriKODE and edit_obyekwisata.kategoriKODE.kategoriwisataKODE == kat.kategoriwisataKODE %}
+                                        selected
+                                    {% endif %}>
+                                    {{ kat.kategoriwisataNAMA }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+
+                    <!-- Alamat -->
+                    <div class="grid grid-cols-3 items-center gap-4">
+                        <label for="alamat" class="text-sm font-medium text-gray-700">Alamat</label>
+                        <input type="text" name="alamat" id="alamat"
+                            class="col-span-2 border border-gray-300 rounded-lg p-2.5 text-sm w-full focus:ring-blue-500 focus:border-blue-500"
+                            placeholder="Masukkan alamat lengkap" value="{% if edit_obyekwisata %}{{ edit_obyekwisata.obyekALAMAT }}{% endif %}" maxlength="255">
+                    </div>
+
+                    <!-- Koordinat Latitude -->
+                    <div class="grid grid-cols-3 items-center gap-4">
+                        <label for="latitude" class="text-sm font-medium text-gray-700">Latitude</label>
+                        <input type="number" name="latitude" id="latitude" step="any"
+                            class="col-span-2 border border-gray-300 rounded-lg p-2.5 text-sm w-full focus:ring-blue-500 focus:border-blue-500"
+                            placeholder="Contoh: -7.123456" value="{% if edit_obyekwisata %}{{ edit_obyekwisata.obyekLATITUDE }}{% endif %}" required>
+                    </div>
+
+                    <!-- Koordinat Longitude -->
+                    <div class="grid grid-cols-3 items-center gap-4">
+                        <label for="longitude" class="text-sm font-medium text-gray-700">Longitude</label>
+                        <input type="number" name="longitude" id="longitude" step="any"
+                            class="col-span-2 border border-gray-300 rounded-lg p-2.5 text-sm w-full focus:ring-blue-500 focus:border-blue-500"
+                            placeholder="Contoh: 110.123456" value="{% if edit_obyekwisata %}{{ edit_obyekwisata.obyekLONGITUDE }}{% endif %}" required>
+                    </div>
+
+                    <!-- Jam Buka -->
+                    <div class="grid grid-cols-3 items-center gap-4">
+                        <label for="jam_buka" class="text-sm font-medium text-gray-700">Jam Buka</label>
+                        <input type="time" name="jam_buka" id="jam_buka"
+                            class="col-span-2 border border-gray-300 rounded-lg p-2.5 text-sm w-full focus:ring-blue-500 focus:border-blue-500"
+                            value="{% if edit_obyekwisata and edit_obyekwisata.obyekJAMBUKA %}{{ edit_obyekwisata.obyekJAMBUKA|time:'H:i' }}{% endif %}">
+                    </div>
+
+                    <!-- Jam Tutup -->
+                    <div class="grid grid-cols-3 items-center gap-4">
+                        <label for="jam_tutup" class="text-sm font-medium text-gray-700">Jam Tutup</label>
+                        <input type="time" name="jam_tutup" id="jam_tutup"
+                            class="col-span-2 border border-gray-300 rounded-lg p-2.5 text-sm w-full focus:ring-blue-500 focus:border-blue-500"
+                            value="{% if edit_obyekwisata and edit_obyekwisata.obyekJAMTUTUP %}{{ edit_obyekwisata.obyekJAMTUTUP|time:'H:i' }}{% endif %}">
+                    </div>
+
+                    <!-- Popularitas -->
+                    <div class="grid grid-cols-3 items-center gap-4">
+                        <label for="popularitas" class="text-sm font-medium text-gray-700">Popularitas (1-5)</label>
+                        <input type="number" name="popularitas" id="popularitas" min="1" max="5"
+                            class="col-span-2 border border-gray-300 rounded-lg p-2.5 text-sm w-full focus:ring-blue-500 focus:border-blue-500"
+                            placeholder="Nilai 1-5" value="{% if edit_obyekwisata %}{{ edit_obyekwisata.obyekPOPULARITAS }}{% endif %}">
+                    </div>
+
+                    <!-- Foto -->
+                    <div class="grid grid-cols-3 items-center gap-4">
+                        <label for="foto" class="text-sm font-medium text-gray-700">Foto</label>
+                        <div class="col-span-2">
+                            <input type="file" name="foto" id="foto" accept="image/*"
+                                class="border border-gray-300 rounded-lg p-2.5 text-sm w-full focus:ring-blue-500 focus:border-blue-500">
+                            {% if edit_obyekwisata and edit_obyekwisata.obyekFOTO %}
+                                <div class="mt-2">
+                                    <img src="/media/obyekwisata/{{ edit_obyekwisata.obyekFOTO }}" alt="Foto Sekarang" class="w-20 h-16 object-cover rounded border">
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <!-- Definisi -->
+                    <div class="grid grid-cols-3 items-start gap-4">
+                        <label for="definisi" class="text-sm font-medium text-gray-700">Definisi</label>
+                        <textarea name="definisi" id="definisi" rows="3"
+                            class="col-span-2 border border-gray-300 rounded-lg p-2.5 text-sm w-full focus:ring-blue-500 focus:border-blue-500"
+                            placeholder="Masukkan definisi obyek wisata">{% if edit_obyekwisata %}{{ edit_obyekwisata.obyekDEFINISI }}{% endif %}</textarea>
+                    </div>
+
+                    <!-- Keterangan -->
+                    <div class="grid grid-cols-3 items-start gap-4">
+                        <label for="keterangan" class="text-sm font-medium text-gray-700">Keterangan</label>
+                        <textarea name="keterangan" id="keterangan" rows="3"
+                            class="col-span-2 border border-gray-300 rounded-lg p-2.5 text-sm w-full focus:ring-blue-500 focus:border-blue-500"
+                            placeholder="Masukkan keterangan tambahan">{% if edit_obyekwisata %}{{ edit_obyekwisata.obyekKETERANGAN }}{% endif %}</textarea>
+                    </div>
+                </div>
+            <!-- Tombol -->
+            <div class="flex justify-center mt-6">
+                <button type="submit"
+                    class="px-6 py-2 text-sm font-medium text-white bg-blue-700 rounded-lg shadow hover:bg-blue-800 focus:ring-4 focus:ring-blue-300">
+                    {% if edit_obyekwisata %} Ubah {% else %} Simpan {% endif %}
+                </button>
+            </div>
+
+            
+        </form>
+
+
+    </div>
+
+        <form method="POST" enctype="multipart/form-data"
+            action="{% url 'sync_excel' %}"
+            class="w-full bg-white border border-gray-200 rounded-lg shadow p-6 items-center text-center"
+            onsubmit="return showLoading()">
+            {% csrf_token %}
+            <input type="file" name="excel_file" accept=".xlsx,.xls" required class="border p-1 text-sm"/>
+            <button type="submit" class="ml-2 bg-green-500 text-white px-4 py-2 rounded">
+                Sync with Excel
+            </button>
+        </form>
+
+        <!-- Overlay Loading -->
+        <div id="loading" class="hidden fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50">
+            <div class="text-center bg-white rounded-lg p-8 shadow-2xl max-w-md mx-4">
+                <img src="{% static 'images/Malcha Loading GIF.gif' %}" alt="Loading..." style="width: 200px; height: 150px; margin: 0 auto;">
+                <p class="text-gray-800 text-lg mt-4 font-semibold">Sedang memproses file Excel...</p>
+                <p class="text-gray-600 text-sm mt-2">Mohon tunggu, jangan tutup halaman ini</p>
+                
+                <!-- Optional: Add a progress bar or spinner for better UX -->
+                <div class="mt-4">
+                    <div class="animate-spin inline-block w-6 h-6 border-4 border-current border-t-transparent text-blue-600 rounded-full" role="status">
+                        <span class="sr-only">Loading...</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+</div>
+
+<!-- Script Search -->
+<script>
+    document.getElementById("searchInput").addEventListener("keyup", function () {
+        let filter = this.value.toLowerCase();
+        let rows = document.querySelectorAll("#obyekwisataTable tbody tr");
+
+        rows.forEach(row => {
+            let text = row.innerText.toLowerCase();
+            row.style.display = text.includes(filter) ? "" : "none";
+        });
+    });
+
+    function showLoading() {
+        const loading = document.getElementById("loading");
+        loading.classList.remove("hidden");
+        // Force the background style with JavaScript
+        loading.style.backgroundColor = "rgba(0, 0, 0, 0.9)";
+        loading.style.backdropFilter = "blur(2px)";
+        return true;
+    }
+
+    // Alternative: Set styles when page loads
+    document.addEventListener('DOMContentLoaded', function() {
+        const loading = document.getElementById("loading");
+        loading.style.backgroundColor = "rgba(0, 0, 0, 0.9)";
+    });
+
+
+</script>
+{% endblock content %}

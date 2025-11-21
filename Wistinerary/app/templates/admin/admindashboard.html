@@ -1,0 +1,67 @@
+{% extends "component/base.html" %}
+
+{% block title %}Admin Dashboard{% endblock %}
+
+{% block content %}
+{% load static %}
+  {% include "component/navbar_admin.html" %}
+
+  <div class="p-4 sm:ml-64">
+    <h1 class="text-2xl font-bold mb-6">Dashboard Admin</h1>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div class="p-6 bg-red-300 rounded-lg shadow text-center">
+        <h2 class="text-xl font-semibold">Obyek Wisata</h2>
+        <p class="text-3xl font-bold text-black">{{ dict_count.obyekwisata_count }}</p>
+      </div>
+
+      <div class="p-6 bg-yellow-300 rounded-lg shadow text-center">
+        <h2 class="text-xl font-semibold">Kegiatan</h2>
+        <p class="text-3xl font-bold text-black">{{ dict_count.kegiatan_count }}</p>
+      </div>
+
+      <div class="p-6 bg-blue-300 rounded-lg shadow text-center">
+        <h2 class="text-xl font-semibold">Berita</h2>
+        <p class="text-3xl font-bold text-black">{{ dict_count.berita_count }}</p>
+      </div>
+
+      <div class="p-6 bg-indigo-300 rounded-lg shadow text-center">
+        <h2 class="text-xl font-semibold">Kategori Wisata</h2>
+        <p class="text-3xl font-bold text-black">{{ dict_count.kategoriwisata_count }}</p>
+      </div>
+
+      <div class="p-6 bg-purple-300 rounded-lg shadow text-center">
+        <h2 class="text-xl font-semibold">Kategori Berita</h2>
+        <p class="text-3xl font-bold text-black">{{ dict_count.kategoriberita_count }}</p>
+      </div>
+
+      <div class="p-6 bg-pink-300 rounded-lg shadow text-center">
+        <h2 class="text-xl font-semibold">Provinsi</h2>
+        <p class="text-3xl font-bold text-black">{{ dict_count.provinsi_count }}</p>
+      </div>
+
+      <div class="p-6 bg-red-300 rounded-lg shadow text-center">
+        <h2 class="text-xl font-semibold">Kabupaten</h2>
+        <p class="text-3xl font-bold text-black">{{ dict_count.kabupaten_count }}</p>
+      </div>
+
+      <div class="p-6 bg-gray-300 rounded-lg shadow text-center">
+        <h2 class="text-xl font-semibold">Kecamatan</h2>
+        <p class="text-3xl font-bold text-black">{{ dict_count.kecamatan_count }}</p>
+      </div>
+
+      <div class="p-6 bg-green-300 rounded-lg shadow text-center">
+        <h2 class="text-xl font-semibold">Jarak Obyek</h2>
+        <p class="text-3xl font-bold text-black">{{ dict_count.jarakobyek_count }}</p>
+      </div>
+    </div>
+    <!-- Gambar di pojok kanan bawah -->
+  <div class="" style='position:fixed; bottom: 0; right: 0;'>
+    <img src="{% static 'images/MalchaHome.png' %}" 
+         alt="Logo"
+         class="w-24 h-auto opacity-80">
+  </div>
+  </div>
+
+
+{% endblock content %}

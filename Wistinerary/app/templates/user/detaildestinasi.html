@@ -1,0 +1,290 @@
+{% extends "component/base.html" %}
+{% load static %}
+{% block title %}{{ obyek.obyekNAMA }}{% endblock %}
+
+{% block content %}
+  {% include "component/navbar.html" %}
+  
+  <!-- Main Content -->
+  <div class="container main-content-container detail">
+      <!-- Main Content Grid -->
+      <div class="grid grid-cols-2 gap-8">
+          
+          <!-- Left Column - Image and Info -->
+          <div class="left-section">
+              <div class="image-section">
+                <img src="/media/obyekwisata/{{ obyek.obyekFOTO }}" 
+                    alt="{{ obyek.obyekNAMA }}" 
+                    class="w-full h-full object-cover">
+                
+                <div class="image-text">
+                    <h2 class="text-2xl font-bold mb-2">{{ obyek.obyekNAMA }}</h2>
+                    <div class="flex items-center space-x-2">
+                        <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                        </svg>
+                        <span class="text-sm font-medium">{{ obyek.obyekPOPULARITAS }}/5</span>
+                    </div>
+                </div>
+              </div>
+          </div>
+          <!-- Left Column - Image and Info -->
+
+          <!-- Right Sidebar -->
+          <div class="space-y-6 col-span-1">
+              <!-- Quick Info Card -->
+              <div class="bg-white rounded-2xl p-6 border">
+                  <h3 class="text-xl font-bold text-gray-800 mb-6">{{ obyek.obyekNAMA }}</h3>
+                  <!-- Rating -->
+                  <div class="mb-6">
+                      <div class="flex items-center mb-2">
+                          <div class="container-rating">
+                              <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                              </svg>
+                              <span class="span-rating">{{ obyek.obyekPOPULARITAS }}/5</span>
+                          </div>
+                      </div>
+                  </div>
+
+                  <!-- Category Tags -->
+                  <div class="mb-6">
+                        <span class="category-span mb-6">
+                            {{ obyek.kategoriKODE.kategoriwisataNAMA }}
+                        </span>
+                    </div>
+
+                  <!-- Lokasi -->
+                  <div class="infor-container">
+                      <div class="flex items-center mb-4">
+                          <div class="infor-span-1">
+                              <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                              </svg>
+                          </div>
+                          <h4 class="font-semibold text-gray-800">Lokasi</h4>
+                      </div>
+                      <p>{{ obyek.obyekALAMAT }}</p>
+                  </div>
+
+                  <!-- Jam operasional -->
+                  <div class="infor-container">
+                      <div class="flex items-center mb-4">
+                          <div class="infor-span-2">
+                              <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                              </svg>
+                          </div>
+                          <h4 class="font-semibold text-gray-800">Jam Operasional</h4>
+                      </div>
+                      <p>{{ obyek.obyekJAMBUKA|time:"H:i" }} - {{ obyek.obyekJAMTUTUP|time:"H:i" }} WIB</p>
+                  </div>
+              </div>
+          </div>
+          <!-- Right Sidebar -->
+
+      </div>
+  </div>
+
+  <!-- Informasi Destinasi -->
+  <div class="container mx-auto rounded-lg mt-2 mb-8 border p-8">
+    <div class="mb-6">
+        <h3 class="text-2xl font-bold text-gray-800 mb-4 flex items-center">
+            <svg class="w-6 h-6 text-blue-500 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+            </svg>
+            Informasi Destinasi
+        </h3>
+    </div>
+    <h4 class="text-xl font-semibold text-gray-800 mb-4">Deskripsi</h4>
+    <p class="text-gray-600 leading-relaxed mb-4">{{ obyek.obyekKETERANGAN }}</p>
+  </div>
+
+  {% if kegiatan %}
+    <!--Section swiper kegiatan-->
+    <div class="container container-swiper">
+    <p class="title-swiper">Kegiatan Terkait</p>
+
+    <!-- Slider -->
+    <div class="relative p-8 rounded-xl kegiatan-swiper-container">
+
+        <!-- Swipper Buttons -->
+        <div class="swiper-button-prev swiper-left">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+            <path
+            d="M32 15H3.41l8.29-8.29-1.41-1.42-10 10a1 1 0 0 0 0 1.41l10 10 1.41-1.41L3.41 17H32z"
+            data-name="4-Arrow Left" />
+        </svg>
+        </div>
+
+        <div class="swiper-button-next swiper-right">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+            <path
+            d="m31.71 15.29-10-10-1.42 1.42 8.3 8.29H0v2h28.59l-8.29 8.29 1.41 1.41 10-10a1 1 0 0 0 0-1.41z"
+            data-name="3-Arrow Right" />
+        </svg>
+        </div>
+
+        <!-- Swiper Container -->
+        <div class="swiper mySwiper overflow-hidden pb-12">
+        <div class="swiper-wrapper">
+
+            {% for obyek in kegiatan %}
+            <!--Card kegiatan -->
+            <div class="container-card-swiper swiper-slide border border-gray-50 rounded-xl">
+
+                <!-- Image -->
+                <div class="w-full h-48 rounded-t-xl">
+                {% if obyek.eventPOSTER %}
+                <img
+                    src="/media/kegiatan/{{ obyek.eventPOSTER }}"
+                    alt="{{ obyek.eventNAMA }}"
+                    class="w-full h-full object-cover rounded-t-xl"/>
+                {% else %}
+                <img
+                    src="{% static 'images/notfound.png' %}"
+                    alt="Foto Tidak Ditemukan"
+                    class="w-full h-full object-cover rounded-t-xl"/>
+                {% endif %}
+                </div>
+
+                <!-- Content -->
+                <div class="container-contain-swiper">
+                
+                    <div class="flex items-start justify-between mb-3">
+                    <p class="card-title">
+                        {{ obyek.eventNAMA }}
+                    </p>
+                    </div>
+
+                    <span
+                    class="category-span">
+                    {{ obyek.eventMULAI }} - {{ obyek.eventSELESAI }}
+                    </span>
+
+                    <div class="additional-information-container">
+                    <svg
+                        class="w-4 h-4 text-gray-400 mr-2 mt-0.5 flex-shrink-0"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24">
+                        <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                    </svg>
+                    <p class="additional-information-text">
+                        {{ obyek.eventKET }}
+                    </p>
+                    </div>
+
+
+                <div class="button-container">
+                    <a href="{% url 'detailkegiatan' obyek.eventKODE %}">
+                    <button
+                        class="button">
+                        Lihat Detail
+                    </button>
+                    </a>
+                </div>
+                </div>
+            
+            </div>
+            <!-- End card kegiatan -->
+            {% endfor %}
+        </div>
+        <!-- Navigation-->
+        <div class="swiper-pagination"></div>
+        </div>
+    </div>
+    </div>
+  {% endif %}
+
+  {% if berita %}
+      <!-- Section berita -->
+      <div class="container mx-auto">
+          <h2 class="text-4xl font-bold text-blue-primary">Berita Terkini</h2>
+          <!-- Slider -->
+        <div class="relative pt-8 rounded-xl berita-swiper-container">
+            <!-- Navigation Buttons -->
+            <div class="swiper-button-prev absolute left-2 top-1/2 transform -translate-y-1/2 z-10 bg-white rounded-full w-10 h-10 flex items-center justify-center shadow-lg hover:bg-gray-50 cursor-pointer p-3">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+                <path d="M32 15H3.41l8.29-8.29-1.41-1.42-10 10a1 1 0 0 0 0 1.41l10 10 1.41-1.41L3.41 17H32z" data-name="4-Arrow Left"/>
+                </svg>
+            </div>
+            <div class="swiper-button-next absolute right-2 top-1/2 transform -translate-y-1/2 z-10 bg-white rounded-full w-10 h-10 flex items-center justify-center shadow-lg hover:bg-gray-50 cursor-pointer p-3">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+                    <path d="m31.71 15.29-10-10-1.42 1.42 8.3 8.29H0v2h28.59l-8.29 8.29 1.41 1.41 10-10a1 1 0 0 0 0-1.41z" data-name="3-Arrow Right"/>
+                </svg>
+            </div>
+
+            <div class="swiper mySwiper overflow-hidden pb-16">
+                <div class="swiper-wrapper">
+                    {% for obyek in berita %}
+                    <!-- Card 1 -->
+                    <div class="swiper-slide">
+                        <div class="bg-white border border-gray-200 rounded-2xl shadow-md  overflow-hidden h-auto max-h">
+                            <!-- Image -->
+                            {% if obyek.beritaICONFOTO %}
+                                <img src="/media/berita/{{ obyek.beritaICONFOTO }}" 
+                                    alt="{{ obyek.beritaJUDUL }}" 
+                                    class="w-full h-full object-cover"  style="height: 700px; object-fit: contain; background-color: oklch(96.7% 0.003 264.542)">
+                            {% else %}
+                                <div class="w-full h-full bg-gradient-to-br from-green-400 to-blue-500 flex items-center justify-center text-white text-4xl">
+                                🎉
+                                </div>
+                            {% endif %}
+                            
+                            <!-- Content -->
+                            <div class="p-8">
+                                <!-- Date Badge -->
+                                <div class="mb-4">
+                                    <span class="inline-flex items-center bg-gradient-to-r from-blue-100 to-green-100 text-blue-800 text-sm px-4 py-2 rounded-full font-semibold border border-blue-200">
+                                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                                        </svg>
+                                        {{ obyek.beritaTGL }}
+                                    </span>
+                                </div>
+                                
+                                <!-- Title -->
+                                <h3 class="text-xl font-bold text-gray-800 group-hover:text-green-600 transition-colors duration-300 mb-4 leading-tight">
+                                    {{ obyek.beritaJUDUL }}
+                                </h3>
+                                
+                                <!-- Content with Icon -->
+                                <div class="flex items-start mb-6">
+                                    <div class="bg-gray-100 rounded-lg p-2 mr-3 flex-shrink-0">
+                                        <svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                                        </svg>
+                                    </div>
+                                    <p class="text-gray-600 leading-relaxed text-base">
+                                        {{ obyek.beritaISI }}
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div class="mb-10" style="margin-left: 40px;">
+                                <a href="{% url 'detailberita' obyek.beritaKODE %}">
+                                <button class="bg-green-500 text-white px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300 shadow-md hover:shadow-lg transform hover:-translate-y-0.5">
+                                    Lihat Detail
+                                </button>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                <!-- Navigation Pagination -->
+                <div class="swiper-pagination mt-8"></div>
+            </div>
+        </div>
+      </div>
+  {% endif %}
+
+
+  {% include "component/footer.html"%}
+
+{% endblock content %}
