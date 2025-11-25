@@ -17,7 +17,7 @@
                         </svg>
                     </div>
                     <input type="text" id="searchInput" placeholder="Cari berita..."
-                        class="block pt-2 pl-10 text-sm border border-gray-300 rounded-lg w-full bg-gray-50 focus:ring-blue-500 focus:border-blue-500">
+                        class="block pt-2 pl-10 text-sm border border-gray-300 rounded-lg w-full bg-gray-50">
                 </div>
             </div>
 
@@ -72,20 +72,20 @@
                             {% endif %}
                         </td>
                         <td class="px-6 py-4">
-                            <a href="{% url 'editberita' brt.beritaKODE %}" class="font-medium text-blue-600 hover:underline">
+                            <a href="{% url 'editberita' brt.beritaKODE %}" class="font-medium text-blue-600">
                                 Ubah
                             </a>
                         </td>
                         <td class="px-6 py-4">
                             <form action="{% url 'deleteberita' brt.beritaKODE %}" method="post" onsubmit="return confirmDelete();">
                                 {% csrf_token %}
-                                <button type="submit" class="font-medium text-red-600 hover:underline">Hapus</button>
+                                <button type="submit" class="font-medium text-red-600">Hapus</button>
                             </form>
                         </td>
                     </tr>
                     {% empty %}
                     <tr>
-                        <td colspan="14" class="px-6 py-4 text-center text-gray-500">Belum ada data berita</td>
+                        <td colspan="10" class="px-6 py-4 text-center text-gray-500">Belum ada data berita</td>
                     </tr>
                     {% endfor %}
                 </tbody>
@@ -185,7 +185,7 @@
                 <div class="grid grid-cols-3 items-center gap-4">
                     <label for="kode" class="text-sm font-medium text-gray-700">Kode</label>
                     <input type="text" name="kode" id="kode"
-                        class="col-span-2 border border-gray-300 rounded-lg p-2.5 text-sm w-full focus:ring-blue-500 focus:border-blue-500 bg-gray-200"
+                        class="col-span-2 border border-gray-300 rounded-lg p-2.5 text-sm w-full bg-gray-200"
                         placeholder="Masukkan kode berita" value="{% if edit_berita %}{{ edit_berita.beritaKODE }}{% else %}{{ new_kode }}{% endif %}" required readonly maxlength="11">
                 </div>
 
@@ -193,7 +193,7 @@
                 <div class="grid grid-cols-3 items-center gap-4">
                     <label for="judul" class="text-sm font-medium text-gray-700">Judul Berita</label>
                     <input type="text" name="judul" id="judul"
-                        class="col-span-2 border border-gray-300 rounded-lg p-2.5 text-sm w-full focus:ring-blue-500 focus:border-blue-500"
+                        class="col-span-2 border border-gray-300 rounded-lg p-2.5 text-sm w-full"
                         placeholder="Masukkan judul berita" value="{% if edit_berita %}{{ edit_berita.beritaJUDUL }}{% endif %}" required maxlength="255">
                 </div>
 
@@ -201,7 +201,7 @@
                 <div class="grid grid-cols-3 items-center gap-4">
                     <label for="kategori" class="text-sm font-medium text-gray-700">Kategori</label>
                     <select name="kategori" id="kategori" 
-                        class="col-span-2 border border-gray-300 rounded-lg p-2.5 text-sm w-full focus:ring-blue-500 focus:border-blue-500">
+                        class="col-span-2 border border-gray-300 rounded-lg p-2.5 text-sm w-full">
                         <option value="">Pilih kategori (opsional)</option>
                         {% for kat in kategoriberita %}
                             <option value="{{ kat.kategoriberitaKODE }}" 
@@ -216,7 +216,7 @@
                 <div class="grid grid-cols-3 items-center gap-4">
                     <label for="kegiatan" class="text-sm font-medium text-gray-700">Kegiatan</label>
                     <select name="kegiatan" id="kegiatan" 
-                        class="col-span-2 border border-gray-300 rounded-lg p-2.5 text-sm w-full focus:ring-blue-500 focus:border-blue-500">
+                        class="col-span-2 border border-gray-300 rounded-lg p-2.5 text-sm w-full">
                         <option value="">Pilih kegiatan (opsional)</option>
                         {% for keg in kegiatan %}
                             <option value="{{ keg.eventKODE }}" 
@@ -231,7 +231,7 @@
                 <div class="grid grid-cols-3 items-center gap-4">
                     <label for="obyek" class="text-sm font-medium text-gray-700">Obyek Wisata</label>
                     <select name="obyek" id="obyek" 
-                        class="col-span-2 border border-gray-300 rounded-lg p-2.5 text-sm w-full focus:ring-blue-500 focus:border-blue-500">
+                        class="col-span-2 border border-gray-300 rounded-lg p-2.5 text-sm w-full">
                         <option value="">Pilih obyek wisata (opsional)</option>
                         {% for obj in obyekwisata %}
                             <option value="{{ obj.obyekKODE }}" 
@@ -246,7 +246,7 @@
                 <div class="grid grid-cols-3 items-center gap-4">
                     <label for="kabupaten" class="text-sm font-medium text-gray-700">Kabupaten</label>
                     <select name="kabupaten" id="kabupaten" 
-                        class="col-span-2 border border-gray-300 rounded-lg p-2.5 text-sm w-full focus:ring-blue-500 focus:border-blue-500">
+                        class="col-span-2 border border-gray-300 rounded-lg p-2.5 text-sm w-full">
                         <option value="">Pilih kabupaten (opsional)</option>
                         {% for kab in kabupaten %}
                             <option value="{{ kab.kabupatenKODE }}" 
@@ -261,7 +261,7 @@
                 <div class="grid grid-cols-3 items-center gap-4">
                     <label for="penulis" class="text-sm font-medium text-gray-700">Penulis</label>
                     <input type="text" name="penulis" id="penulis"
-                        class="col-span-2 border border-gray-300 rounded-lg p-2.5 text-sm w-full focus:ring-blue-500 focus:border-blue-500"
+                        class="col-span-2 border border-gray-300 rounded-lg p-2.5 text-sm w-full"
                         placeholder="Masukkan nama penulis" value="{% if edit_berita %}{{ edit_berita.beritaPENULIS }}{% endif %}" maxlength="60">
                 </div>
 
@@ -269,7 +269,7 @@
                 <div class="grid grid-cols-3 items-center gap-4">
                     <label for="tanggal" class="text-sm font-medium text-gray-700">Tanggal Berita</label>
                     <input type="date" name="tanggal" id="tanggal"
-                        class="col-span-2 border border-gray-300 rounded-lg p-2.5 text-sm w-full focus:ring-blue-500 focus:border-blue-500"
+                        class="col-span-2 border border-gray-300 rounded-lg p-2.5 text-sm w-full"
                         value="{% if edit_berita and edit_berita.beritaTGL %}{{ edit_berita.beritaTGL|date:'Y-m-d' }}{% endif %}">
                 </div>
 
@@ -278,7 +278,7 @@
                     <label for="foto" class="text-sm font-medium text-gray-700">Foto</label>
                     <div class="col-span-2">
                         <input type="file" name="foto" id="foto" accept="image/*"
-                            class="border border-gray-300 rounded-lg p-2.5 text-sm w-full focus:ring-blue-500 focus:border-blue-500">
+                            class="border border-gray-300 rounded-lg p-2.5 text-sm w-full">
                         {% if edit_berita and edit_berita.beritaICONFOTO %}
                             <div class="mt-2">
                                 <img src="/media/{{ edit_berita.beritaICONFOTO }}" alt="Foto Sekarang" class="w-20 h-24 object-cover rounded border">
@@ -291,7 +291,7 @@
                 <div class="grid grid-cols-3 items-center gap-4">
                     <label for="sumber" class="text-sm font-medium text-gray-700">Sumber</label>
                     <input type="text" name="sumber" id="sumber"
-                        class="col-span-2 border border-gray-300 rounded-lg p-2.5 text-sm w-full focus:ring-blue-500 focus:border-blue-500"
+                        class="col-span-2 border border-gray-300 rounded-lg p-2.5 text-sm w-full"
                         placeholder="Masukkan sumber berita" value="{% if edit_berita %}{{ edit_berita.beritaSUMBER }}{% endif %}" maxlength="255">
                 </div>
 
@@ -299,7 +299,7 @@
                 <div class="grid grid-cols-3 items-start gap-4">
                     <label for="isi" class="text-sm font-medium text-gray-700">Isi Berita</label>
                     <textarea name="isi" id="isi" rows="6"
-                        class="col-span-2 border border-gray-300 rounded-lg p-2.5 text-sm w-full focus:ring-blue-500 focus:border-blue-500"
+                        class="col-span-2 border border-gray-300 rounded-lg p-2.5 text-sm w-full"
                         placeholder="Masukkan isi berita">{% if edit_berita %}{{ edit_berita.beritaISI }}{% endif %}</textarea>
                 </div>
 
@@ -307,7 +307,7 @@
                 <div class="grid grid-cols-3 items-start gap-4">
                     <label for="isi2" class="text-sm font-medium text-gray-700">Isi Berita 2</label>
                     <textarea name="isi2" id="isi2" rows="4"
-                        class="col-span-2 border border-gray-300 rounded-lg p-2.5 text-sm w-full focus:ring-blue-500 focus:border-blue-500"
+                        class="col-span-2 border border-gray-300 rounded-lg p-2.5 text-sm w-full"
                         placeholder="Masukkan isi berita tambahan (opsional)">{% if edit_berita %}{{ edit_berita.beritaISI2 }}{% endif %}</textarea>
                 </div>
             </div>
@@ -315,7 +315,7 @@
             <!-- Tombol -->
             <div class="flex justify-center mt-6">
                 <button type="submit"
-                    class="px-6 py-2 text-sm font-medium text-white bg-blue-700 rounded-lg shadow hover:bg-blue-800 focus:ring-4 focus:ring-blue-300">
+                    class="px-6 py-2 text-sm font-medium text-white bg-blue-700 rounded-lg shadow">
                     {% if edit_berita %} Update {% else %} Simpan {% endif %}
                 </button>
             </div>
@@ -328,7 +328,6 @@
     document.getElementById("searchInput").addEventListener("keyup", function () {
         let filter = this.value.toLowerCase();
         let rows = document.querySelectorAll("#beritaTable tbody tr");
-
         rows.forEach(row => {
             let text = row.innerText.toLowerCase();
             row.style.display = text.includes(filter) ? "" : "none";

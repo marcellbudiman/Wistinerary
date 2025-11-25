@@ -17,7 +17,7 @@
                         </svg>
                     </div>
                     <input type="text" id="searchInput" placeholder="Cari provinsi..."
-                        class="block pt-2 pl-10 text-sm border border-gray-300 rounded-lg w-full bg-gray-50 focus:ring-blue-500 focus:border-blue-500">
+                        class="block pt-2 pl-10 text-sm border border-gray-300 rounded-lg w-full bg-gray-50">
                 </div>
             </div>
 
@@ -44,7 +44,7 @@
             <tbody>
             {% for prov in provinsi %}
             <tr class="border-b">
-                <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
                 {{ prov.provinsiKODE }}
                 </td>
                 <td class="px-6 py-4">
@@ -57,7 +57,7 @@
                 {{ prov.provinsiKET }}
                 </td>
                 <td class="px-6 py-4">
-                    <a href="{% url 'editprovinsi' prov.provinsiKODE %}" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">
+                    <a href="{% url 'editprovinsi' prov.provinsiKODE %}" class="font-medium">
                         <button type="button">
                             Edit
                         </button>
@@ -74,7 +74,7 @@
             </tr>
             {% empty %}
             <tr>
-                <td colspan="5" class="px-6 py-4 text-center text-gray-500 dark:text-gray-400">Belum ada data provinsi</td>
+                <td colspan="5" class="px-6 py-4 text-center text-gray-500">Belum ada data provinsi</td>
             </tr>
             {% endfor %}
             </tbody>
@@ -174,7 +174,7 @@
                 <div class="grid grid-cols-3 items-center gap-4">
                     <label for="kode" class="text-sm font-medium text-gray-700">Kode</label>
                     <input type="text" name="kode" id="kode"
-                        class="col-span-2 border border-gray-300 rounded-lg p-2.5 text-sm w-full focus:ring-blue-500 focus:border-blue-500 {% if edit_prov %}bg-gray-200{% endif %}"
+                        class="col-span-2 border border-gray-300 rounded-lg p-2.5 text-sm w-full{% if edit_prov %}bg-gray-200{% endif %}"
                         placeholder="Masukkan kode" value="{% if edit_prov %}{{ edit_prov.provinsiKODE }}{% endif %}" required {% if edit_prov %}disabled{% endif %} maxlength="2">
                 </div>
 
@@ -182,7 +182,7 @@
                 <div class="grid grid-cols-3 items-center gap-4">
                     <label for="nama" class="text-sm font-medium text-gray-700">Nama</label>
                     <input type="text" name="nama" id="nama"
-                        class="col-span-2 border border-gray-300 rounded-lg p-2.5 text-sm w-full focus:ring-blue-500 focus:border-blue-500"
+                        class="col-span-2 border border-gray-300 rounded-lg p-2.5 text-sm w-full"
                         placeholder="Masukkan nama" value="{% if edit_prov %}{{ edit_prov.provinsiNAMA }}{% endif %}" required maxlength="30">
                 </div>
 
@@ -190,7 +190,7 @@
                 <div class="grid grid-cols-3 items-center gap-4">
                     <label for="ket" class="text-sm font-medium text-gray-700">Keterangan</label>
                     <input type="text" name="keterangan" id="keterangan"
-                        class="col-span-2 border border-gray-300 rounded-lg p-2.5 text-sm w-full focus:ring-blue-500 focus:border-blue-500"
+                        class="col-span-2 border border-gray-300 rounded-lg p-2.5 text-sm w-full"
                         placeholder="Masukkan keterangan" value="{% if edit_prov %}{{ edit_prov.provinsiKET }}{% endif %}" maxlength="255">
                 </div>
 
@@ -198,7 +198,7 @@
                 <div class="grid grid-cols-3 items-start gap-4">
                     <label for="alamat" class="text-sm font-medium text-gray-700">Alamat</label>
                     <textarea name="alamat" id="alamat" rows="3"
-                        class="col-span-2 border border-gray-300 rounded-lg p-2.5 text-sm w-full focus:ring-blue-500 focus:border-blue-500"
+                        class="col-span-2 border border-gray-300 rounded-lg p-2.5 text-sm w-full"
                         placeholder="Masukkan alamat" maxlength="100">{% if edit_prov %}{{ edit_prov.provinsiALAMAT }}{% endif %}</textarea>
                 </div>
             </div>
@@ -206,7 +206,7 @@
             <!-- Tombol -->
             <div class="flex justify-center mt-6">
                 <button type="submit"
-                    class="px-6 py-2 text-sm font-medium text-white bg-blue-700 rounded-lg shadow hover:bg-blue-800 focus:ring-4 focus:ring-blue-300">
+                    class="px-6 py-2 text-sm font-medium text-white bg-blue-700 rounded-lg shadow">
                     {% if edit_prov %} Update {% else %} Simpan {% endif %}
                 </button>
             </div>

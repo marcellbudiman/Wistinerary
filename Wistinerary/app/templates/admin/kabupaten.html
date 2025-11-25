@@ -18,7 +18,7 @@
                         </svg>
                     </div>
                     <input type="text" id="searchInput" placeholder="Cari kabupaten..."
-                        class="block pt-2 pl-10 text-sm border border-gray-300 rounded-lg w-full bg-gray-50 focus:ring-blue-500 focus:border-blue-500">
+                        class="block pt-2 pl-10 text-sm border border-gray-300 rounded-lg w-full bg-gray-50">
                 </div>
             </div>
 
@@ -48,7 +48,7 @@
             <tbody>
             {% for kab in kabupaten %}
             <tr class="border-b">
-                <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
                 {{ kab.kabupatenKODE }}
                 </td>
                 <td class="px-6 py-4">
@@ -74,7 +74,7 @@
                 {{ kab.kabupatenKET }}
                 </td>
                 <td class="px-6 py-4">
-                    <a href="{% url 'editkabupaten' kab.kabupatenKODE %}" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">
+                    <a href="{% url 'editkabupaten' kab.kabupatenKODE %}" class="font-medium text-blue-600 hover:underline">
                         <button type="button">
                             Edit
                         </button>
@@ -91,7 +91,7 @@
             </tr>
             {% empty %}
             <tr>
-                <td colspan="6" class="px-6 py-4 text-center text-gray-500 dark:text-gray-400">Belum ada data kabupaten</td>
+                <td colspan="9" class="px-6 py-4 text-center text-gray-500">Belum ada data kabupaten</td>
             </tr>
             {% endfor %}
             </tbody>
@@ -190,7 +190,7 @@
                 <div class="grid grid-cols-3 items-center gap-4">
                     <label for="kode" class="text-sm font-medium text-gray-700">Kode</label>
                     <input type="text" name="kode" id="kode"
-                        class="col-span-2 border border-gray-300 rounded-lg p-2.5 text-sm w-full focus:ring-blue-500 focus:border-blue-500 {% if edit_kab %}bg-gray-200{% endif %}"
+                        class="col-span-2 border border-gray-300 rounded-lg p-2.5 text-sm w-full {% if edit_kab %}bg-gray-200{% endif %}"
                         placeholder="Masukkan kode" value="{% if edit_kab %}{{ edit_kab.kabupatenKODE }}{% endif %}" required {% if edit_kab %}disabled{% endif %} maxlength="2">
                 </div>
 
@@ -198,7 +198,7 @@
                 <div class="grid grid-cols-3 items-center gap-4">
                     <label for="provinsi" class="text-sm font-medium text-gray-700">Provinsi</label>
                     <select name="provinsi" id="provinsi" 
-                        class="col-span-2 border border-gray-300 rounded-lg p-2.5 text-sm w-full focus:ring-blue-500 focus:border-blue-500 
+                        class="col-span-2 border border-gray-300 rounded-lg p-2.5 text-sm w-full
                             {% if edit_kab %}bg-gray-200{% endif %}"
                         {% if edit_kab %}disabled{% endif %}
                         required>
@@ -216,7 +216,7 @@
                 <div class="grid grid-cols-3 items-center gap-4">
                     <label for="nama" class="text-sm font-medium text-gray-700">Nama</label>
                     <input type="text" name="nama" id="nama"
-                        class="col-span-2 border border-gray-300 rounded-lg p-2.5 text-sm w-full focus:ring-blue-500 focus:border-blue-500"
+                        class="col-span-2 border border-gray-300 rounded-lg p-2.5 text-sm w-full"
                         placeholder="Masukkan nama" value="{% if edit_kab %}{{ edit_kab.kabupatenNAMA }}{% endif %}" required maxlength="60">
                 </div>
 
@@ -224,7 +224,7 @@
                 <div class="grid grid-cols-3 items-center gap-4">
                     <label for="ket" class="text-sm font-medium text-gray-700">Alamat</label>
                     <input type="text" name="alamat" id="alamat"
-                        class="col-span-2 border border-gray-300 rounded-lg p-2.5 text-sm w-full focus:ring-blue-500 focus:border-blue-500"
+                        class="col-span-2 border border-gray-300 rounded-lg p-2.5 text-sm w-full"
                         placeholder="Masukkan alamat" value="{% if edit_kab %}{{ edit_kab.kabupatenALAMAT }}{% endif %}" maxlength="255">
                 </div>
 
@@ -232,7 +232,7 @@
                 <div class="grid grid-cols-3 items-start gap-4">
                     <label for="keterangan" class="text-sm font-medium text-gray-700">Keterangan</label>
                     <textarea name="keterangan" id="keterangan" rows="3"
-                        class="col-span-2 border border-gray-300 rounded-lg p-2.5 text-sm w-full focus:ring-blue-500 focus:border-blue-500"
+                        class="col-span-2 border border-gray-300 rounded-lg p-2.5 text-sm w-full"
                         placeholder="Masukkan keterangan">{% if edit_kab %}{{ edit_kab.kabupatenKET }}{% endif %}</textarea>
                 </div>
 
@@ -241,7 +241,7 @@
                     <label for="foto_icon" class="text-sm font-medium text-gray-700">Foto Icon</label>
                     <div class="col-span-2">
                         <input type="file" name="foto_icon" id="foto_icon" accept="image/*"
-                            class="border border-gray-300 rounded-lg p-2.5 text-sm w-full focus:ring-blue-500 focus:border-blue-500">
+                            class="border border-gray-300 rounded-lg p-2.5 text-sm w-full">
                             {% if edit_kab and edit_kab.kabupatenFOTOICON %}
                                 <div class="mt-2">
                                     <img src="/media/{{ edit_kab.kabupatenFOTOICON }}" alt="Foto Sekarang" class="w-20 h-24 object-cover rounded border">
@@ -254,7 +254,7 @@
                 <div class="grid grid-cols-3 items-start gap-4">
                     <label for="foto_icon_ket" class="text-sm font-medium text-gray-700">Keterangan Foto Icon</label>
                     <textarea name="foto_icon_ket" id="foto_icon_ket" rows="2"
-                        class="col-span-2 border border-gray-300 rounded-lg p-2.5 text-sm w-full focus:ring-blue-500 focus:border-blue-500"
+                        class="col-span-2 border border-gray-300 rounded-lg p-2.5 text-sm w-full"
                         placeholder="Masukkan keterangan foto icon">{% if edit_kab %}{{ edit_kab.kabupatenFOTOICONKET }}{% endif %}</textarea>
                 </div>
             </div>
@@ -262,7 +262,7 @@
             <!-- Tombol -->
             <div class="flex justify-center mt-6">
                 <button type="submit"
-                    class="px-6 py-2 text-sm font-medium text-white bg-blue-700 rounded-lg shadow hover:bg-blue-800 focus:ring-4 focus:ring-blue-300">
+                    class="px-6 py-2 text-sm font-medium text-white bg-blue-700 rounded-lg shadow">
                     {% if edit_kab %} Update {% else %} Simpan {% endif %}
                 </button>
             </div>

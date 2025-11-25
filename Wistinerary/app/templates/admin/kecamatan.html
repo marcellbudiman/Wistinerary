@@ -18,7 +18,7 @@
                         </svg>
                     </div>
                     <input type="text" id="searchInput" placeholder="Cari kecamatan..."
-                        class="block pt-2 pl-10 text-sm border border-gray-300 rounded-lg w-full bg-gray-50 focus:ring-blue-500 focus:border-blue-500">
+                        class="block pt-2 pl-10 text-sm border border-gray-300 rounded-lg w-full bg-gray-50">
                 </div>
             </div>
 
@@ -46,7 +46,7 @@
             <tbody>
             {% for kec in kecamatan %}
             <tr class="border-b">
-                <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
                 {{ kec.kecamatanKODE }}
                 </td>
                 <td class="px-6 py-4">
@@ -62,7 +62,7 @@
                 {{ kec.kecamatanKET }}
                 </td>
                 <td class="px-6 py-4">
-                    <a href="{% url 'editkecamatan' kec.kecamatanKODE %}" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">
+                    <a href="{% url 'editkecamatan' kec.kecamatanKODE %}" class="font-medium">
                         <button type="button">
                             Edit
                         </button>
@@ -71,7 +71,7 @@
                 <td class="px-6 py-4">
                     <form action="{% url 'deletekecamatan' kec.kecamatanKODE %}" method="post" onsubmit="return confirmDelete();">
                         {% csrf_token %}
-                        <button type="submit" class="font-medium text-red-600 hover:underline ms-4">
+                        <button type="submit" class="font-medium text-red-600 ms-4">
                             Delete
                         </button>
                     </form>
@@ -79,7 +79,7 @@
             </tr>
             {% empty %}
             <tr>
-                <td colspan="6" class="px-6 py-4 text-center text-gray-500 dark:text-gray-400">Belum ada data kecamatan</td>
+                <td colspan="6" class="px-6 py-4 text-center text-gray-500">Belum ada data kecamatan</td>
             </tr>
             {% endfor %}
             </tbody>
@@ -179,7 +179,7 @@
                 <div class="grid grid-cols-3 items-center gap-4">
                     <label for="kode" class="text-sm font-medium text-gray-700">Kode</label>
                     <input type="text" name="kode" id="kode"
-                        class="col-span-2 border border-gray-300 rounded-lg p-2.5 text-sm w-full focus:ring-blue-500 focus:border-blue-500 {% if edit_kec %}bg-gray-200{% endif %}"
+                        class="col-span-2 border border-gray-300 rounded-lg p-2.5 text-sm w-full {% if edit_kec %}bg-gray-200{% endif %}"
                         placeholder="Masukkan kode" value="{% if edit_kec %}{{ edit_kec.kecamatanKODE }}{% endif %}" required {% if edit_kec %}disabled{% endif %} maxlength="2">
                 </div>
 
@@ -187,7 +187,7 @@
                 <div class="grid grid-cols-3 items-center gap-4">
                     <label for="kabupaten" class="text-sm font-medium text-gray-700">Kabupaten</label>
                     <select name="kabupaten" id="kabupaten" 
-                        class="col-span-2 border border-gray-300 rounded-lg p-2.5 text-sm w-full focus:ring-blue-500 focus:border-blue-500
+                        class="col-span-2 border border-gray-300 rounded-lg p-2.5 text-sm w-full
                         {% if edit_kec %}bg-gray-200{% endif %}
                         {% if edit_kec %}disabled{% endif %}"
                         >
@@ -205,7 +205,7 @@
                 <div class="grid grid-cols-3 items-center gap-4">
                     <label for="nama" class="text-sm font-medium text-gray-700">Nama</label>
                     <input type="text" name="nama" id="nama"
-                        class="col-span-2 border border-gray-300 rounded-lg p-2.5 text-sm w-full focus:ring-blue-500 focus:border-blue-500"
+                        class="col-span-2 border border-gray-300 rounded-lg p-2.5 text-sm w-full"
                         placeholder="Masukkan nama" value="{% if edit_kec %}{{ edit_kec.kecamatanNAMA }}{% endif %}" required maxlength="30">
                 </div>
 
@@ -213,7 +213,7 @@
                 <div class="grid grid-cols-3 items-center gap-4">
                     <label for="alamat" class="text-sm font-medium text-gray-700">Alamat</label>
                     <input type="text" name="alamat" id="alamat"
-                        class="col-span-2 border border-gray-300 rounded-lg p-2.5 text-sm w-full focus:ring-blue-500 focus:border-blue-500"
+                        class="col-span-2 border border-gray-300 rounded-lg p-2.5 text-sm w-full"
                         placeholder="Masukkan alamat" value="{% if edit_kec %}{{ edit_kec.kecamatanALAMAT }}{% endif %}" required maxlength="255">
                 </div>
 
@@ -221,7 +221,7 @@
                 <div class="grid grid-cols-3 items-start gap-4">
                     <label for="keterangan" class="text-sm font-medium text-gray-700">Keterangan</label>
                     <textarea name="keterangan" id="keterangan" rows="3"
-                        class="col-span-2 border border-gray-300 rounded-lg p-2.5 text-sm w-full focus:ring-blue-500 focus:border-blue-500"
+                        class="col-span-2 border border-gray-300 rounded-lg p-2.5 text-sm w-full"
                         placeholder="Masukkan keterangan">{% if edit_kec %}{{ edit_kec.kecamatanKET }}{% endif %}</textarea>
                 </div>
             </div>
@@ -229,7 +229,7 @@
             <!-- Tombol -->
             <div class="flex justify-center mt-6">
                 <button type="submit"
-                    class="px-6 py-2 text-sm font-medium text-white bg-blue-700 rounded-lg shadow hover:bg-blue-800 focus:ring-4 focus:ring-blue-300">
+                    class="px-6 py-2 text-sm font-medium text-white bg-blue-700 rounded-lg shadow">
                     {% if edit_kec %} Update {% else %} Simpan {% endif %}
                 </button>
             </div>

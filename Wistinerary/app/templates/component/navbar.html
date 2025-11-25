@@ -10,7 +10,7 @@
     {% if request.session.user_id %}
       <div class="flex md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse bg-blue-primary hover:bg-primary-hover"> 
         <a href="{% url 'logout' %}"> 
-          <button type="button" class="text-white bg-blue-primary focus:ring-4 font-medium text-sm px-4 py-2 text-center">
+          <button type="button" class="text-white bg-blue-primary font-medium text-sm px-4 py-2 text-center">
               Logout
           </button> 
         </a> 
@@ -18,7 +18,7 @@
     {% else %}
     <div class="flex md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse bg-blue-primary hover:bg-primary-hover"> 
         <a href="{% url 'login' %}"> 
-          <button type="button" class="text-white bg-blue-primary focus:ring-4 font-medium text-sm px-4 py-2 text-center">
+          <button type="button" class="text-white bg-blue-primary font-medium text-sm px-4 py-2 text-center">
               Login
           </button> 
         </a> 

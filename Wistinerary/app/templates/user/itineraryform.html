@@ -101,7 +101,7 @@
             <div>
                 <label for="hotelSelect" class="block text-lg font-semibold text-gray-700 mb-2">Pilih Hotel</label>
                 <select id="hotelSelect" name="hotel" 
-                    class="w-full border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                    class="w-full border-gray-300 rounded-lg shadow-sm">
                     <option value="">-- Pilih Hotel --</option>
                     {% for hotel in list_object_obyekwisata_hotel %}
                         <option value="{{ hotel.obyekKODE }}">{{ hotel.obyekNAMA }}</option>
@@ -182,9 +182,9 @@
                 <label class="block text-lg font-semibold text-gray-700 mb-3">Pilih Obyek Wisata</label>
                 <div class="space-y-3 overflow-y-auto border border-gray-200 rounded-lg p-4" style="max-height: 250px;">
                     {% for obyek in list_object_obyekwisata %}
-                    <label class="flex items-start p-3 border border-gray-200 rounded-lg hover:bg-gray-50 cursor-pointer transition-colors">
+                    <label class="flex items-start p-3 border border-gray-200 rounded-lg hover:bg-gray-50 cursor-pointer">
                         <input type="checkbox" 
-                               class="obyek-checkbox mt-1 w-5 h-5 text-blue-600 border-gray-300 rounded focus:ring-blue-500" 
+                               class="obyek-checkbox mt-1 w-5 h-5 text-blue-600 border-gray-300 rounded" 
                                value="{{ obyek.obyekKODE }}"
                                onchange="toggleObyekCard('{{ obyek.obyekKODE }}')">
                         <div class="ml-3 flex-1">
@@ -257,7 +257,7 @@
             <!-- Tombol Submit -->
             <div class="flex justify-center pt-4">
                 <button type="submit" 
-                    class="px-8 py-3 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-300 transition-all duration-200 transform hover:scale-105">
+                    class="px-8 py-3 bg-blue-600 text-white font-semibold rounded-lg shadow-md">
                     <svg class="w-5 h-5 inline-block mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
                     </svg>

@@ -15,7 +15,7 @@ from django.utils import timezone
 from django.core.files.storage import FileSystemStorage
 from functools import wraps
 from django.http import JsonResponse
-
+from django.core.paginator import Paginator
 from scripts.algoritma_pso import CalculatePSO
 from scripts.excel_importer import sync_excel
 from .models import hasilitinerary, jarakobyek, pengelola
@@ -1451,10 +1451,15 @@ class AdminPage():
             return redirect("tambahjarakobyek")
         
         list_obj_jarakobyek = jarakobyek.objects.all().order_by("ruteKODE")
+        paginator = Paginator(list_obj_jarakobyek, 10)
+        page_number = request.GET.get('page', 1)
+        page_obj = paginator.get_page(page_number)
+
         list_obj_obyekwisata = obyekwisata.objects.all().order_by("obyekNAMA")
         new_kode = jarakobyek.GenerateKode()
 
         return render(request, "admin/jarakobyek.html", {
+            "page_obj": page_obj,
             'list_obj_jarakobyek': list_obj_jarakobyek,
             'list_obj_obyekwisata': list_obj_obyekwisata,
             "new_kode": new_kode
@@ -1498,10 +1503,15 @@ class AdminPage():
                 return redirect('editjarakobyek', ruteKODE=ruteKODE)
         
         list_obj_jarakobyek = jarakobyek.objects.all().order_by("ruteKODE")
+        paginator = Paginator(list_obj_jarakobyek, 10)
+        page_number = request.GET.get('page', 1)
+        page_obj = paginator.get_page(page_number)
+
         list_obj_obyekwisata = obyekwisata.objects.all().order_by("obyekNAMA")
         new_kode = jarakobyek.GenerateKode()
         
         return render(request, "admin/jarakobyek.html", {
+            "page_obj": page_obj,
             'list_obj_jarakobyek': list_obj_jarakobyek,
             'list_obj_obyekwisata': list_obj_obyekwisata,
             'new_kode': new_kode,
@@ -1524,10 +1534,15 @@ class AdminPage():
                 return redirect('tambahjarakobyek')
 
         list_obj_jarakobyek = jarakobyek.objects.all().order_by("ruteKODE")
+        paginator = Paginator(list_obj_jarakobyek, 10)
+        page_number = request.GET.get('page', 1)
+        page_obj = paginator.get_page(page_number)
+
         list_obj_obyekwisata = obyekwisata.objects.all().order_by("obyekNAMA")
         new_kode = jarakobyek.GenerateKode()
         
         return render(request, "admin/jarakobyek.html", {
+            "page_obj": page_obj,
             'list_obj_jarakobyek': list_obj_jarakobyek,
             'list_obj_obyekwisata': list_obj_obyekwisata,
             'new_kode': new_kode,

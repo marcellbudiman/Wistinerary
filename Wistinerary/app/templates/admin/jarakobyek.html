@@ -18,7 +18,7 @@
                         </svg>
                     </div>
                     <input type="text" id="searchInput" placeholder="Cari obyek wisata..."
-                        class="block pt-2 pl-10 text-sm border border-gray-300 rounded-lg w-full bg-gray-50 focus:ring-blue-500 focus:border-blue-500">
+                        class="block pt-2 pl-10 text-sm border border-gray-300 rounded-lg w-full bg-gray-50">
                 </div>
             </div>
 
@@ -40,7 +40,7 @@
                 </thead>
 
                 <tbody>
-                    {% for obj in list_obj_jarakobyek %}
+                    {% for obj in page_obj %}
                     <tr class="border-b">
                         <td class="px-4 py-4">{{ obj.ruteKODE }}</td>
                         <td class="px-4 py-4">{{ obj.obyekKODEasal.obyekNAMA }}</td>
@@ -70,6 +70,51 @@
                 </tbody>
             </table>
         </div>
+
+        <!-- Pagination -->
+        <div class="flex justify-center items-center gap-2 my-4">
+
+            {% if page_obj.has_previous %}
+                <a href="?page={{ page_obj.previous_page_number }}"
+                class="px-3 py-1 border rounded bg-white hover:bg-gray-100 text-gray-700">« Prev</a>
+            {% endif %}
+
+            {# Tampilkan halaman 1-5 #}
+            {% for num in page_obj.paginator.page_range %}
+                {% if num <= 5 %}
+                    {% if page_obj.number == num %}
+                        <span class="px-3 py-1 border rounded bg-blue-600 text-white">{{ num }}</span>
+                    {% else %}
+                        <a href="?page={{ num }}"
+                        class="px-3 py-1 border rounded bg-white hover:bg-gray-100 text-gray-700">{{ num }}</a>
+                    {% endif %}
+                {% endif %}
+            {% endfor %}
+
+            {# Jika total page > 6, tampilkan ... #}
+            {% if page_obj.paginator.num_pages > 6 %}
+                <span class="px-2">...</span>
+
+                {# Tampilkan halaman terakhir #}
+                {% if page_obj.number == page_obj.paginator.num_pages %}
+                    <span class="px-3 py-1 border rounded bg-blue-600 text-white">
+                        {{ page_obj.paginator.num_pages }}
+                    </span>
+                {% else %}
+                    <a href="?page={{ page_obj.paginator.num_pages }}"
+                    class="px-3 py-1 border rounded bg-white hover:bg-gray-100 text-gray-700">
+                        {{ page_obj.paginator.num_pages }}
+                    </a>
+                {% endif %}
+            {% endif %}
+
+            {% if page_obj.has_next %}
+                <a href="?page={{ page_obj.next_page_number }}"
+                class="px-3 py-1 border rounded bg-white hover:bg-gray-100 text-gray-700">Next »</a>
+            {% endif %}
+
+        </div>
+
     </div>
 
     <!-- Form Input -->
@@ -170,7 +215,7 @@
                 <!-- Kode -->
                 <div class="grid grid-cols-3 items-center gap-4">
                     <label class="text-sm font-medium text-gray-700">Kode</label>
-                    <input type="text" name="ruteKODE" class="col-span-2 border border-gray-300 rounded-lg p-2.5 text-sm w-full focus:ring-blue-500 focus:border-blue-500 bg-gray-200"
+                    <input type="text" name="ruteKODE" class="col-span-2 border border-gray-300 rounded-lg p-2.5 text-sm w-full bg-gray-200"
                            value="{% if edit_jarakobyek %}{{ edit_jarakobyek.ruteKODE }}{% else %}{{ new_kode }}{% endif %}" readonly>
                 </div>
 
@@ -228,7 +273,7 @@
                     Batal
                 </a>
                 {% endif %}
-                <button type="submit" class="px-6 py-2 bg-blue-700 text-white rounded-lg shadow hover:bg-blue-800">
+                <button type="submit" class="px-6 py-2 bg-blue-700 text-white rounded-lg">
                     {% if edit_jarakobyek %}Update{% else %}Simpan{% endif %}
                 </button>
             </div>

@@ -17,7 +17,7 @@
                         </svg>
                     </div>
                     <input type="text" id="searchInput" placeholder="Cari obyek wisata..."
-                        class="block pt-2 pl-10 text-sm border border-gray-300 rounded-lg w-full bg-gray-50 focus:ring-blue-500 focus:border-blue-500">
+                        class="block pt-2 pl-10 text-sm border border-gray-300 rounded-lg w-full bg-gray-50">
                 </div>
             </div>
 
@@ -88,7 +88,7 @@
                     {% endif %}
                 </td>
                 <td class="px-4 py-4">
-                    <a href="{% url 'editobyekwisata' obj.obyekKODE %}" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">
+                    <a href="{% url 'editobyekwisata' obj.obyekKODE %}" class="font-medium">
                         <button type="button">
                             Ubah
                         </button>
@@ -97,7 +97,7 @@
                 <td class="px-4 py-4">
                     <form action="{% url 'deleteobyekwisata' obj.obyekKODE %}" method="post" onsubmit="return confirmDelete();">
                         {% csrf_token %}
-                        <button type="submit" class="font-medium text-red-600 hover:underline ms-4">
+                        <button type="submit" class="font-medium text-red-600 ms-4">
                             Hapus
                         </button>
                     </form>
@@ -105,7 +105,7 @@
             </tr>
             {% empty %}
             <tr>
-                <td colspan="11" class="px-6 py-4 text-center text-gray-500 dark:text-gray-400">Belum ada data obyek wisata</td>
+                <td colspan="11" class="px-6 py-4 text-center text-gray-500">Belum ada data obyek wisata</td>
             </tr>
             {% endfor %}
             </tbody>
@@ -207,7 +207,7 @@
                     <div class="grid grid-cols-3 items-center gap-4">
                         <label for="kode" class="text-sm font-medium text-gray-700">Kode</label>
                         <input type="text" name="kode" id="kode"
-                            class="col-span-2 border border-gray-300 rounded-lg p-2.5 text-sm w-full focus:ring-blue-500 focus:border-blue-500 {% if edit_obyekwisata %}bg-gray-200{% endif %}"
+                            class="col-span-2 border border-gray-300 rounded-lg p-2.5 text-sm w-full {% if edit_obyekwisata %}bg-gray-200{% endif %}"
                             placeholder="Masukkan kode obyek" value="{% if edit_obyekwisata %}{{ edit_obyekwisata.obyekKODE }}{% endif %}" required {% if edit_obyekwisata %}disabled{% endif %} maxlength="3">
                     </div>
 
@@ -215,7 +215,7 @@
                     <div class="grid grid-cols-3 items-center gap-4">
                         <label for="nama" class="text-sm font-medium text-gray-700">Nama Obyek</label>
                         <input type="text" name="nama" id="nama"
-                            class="col-span-2 border border-gray-300 rounded-lg p-2.5 text-sm w-full focus:ring-blue-500 focus:border-blue-500"
+                            class="col-span-2 border border-gray-300 rounded-lg p-2.5 text-sm w-full"
                             placeholder="Masukkan nama obyek wisata" value="{% if edit_obyekwisata %}{{ edit_obyekwisata.obyekNAMA }}{% endif %}" required maxlength="120">
                     </div>
 
@@ -223,7 +223,7 @@
                     <div class="grid grid-cols-3 items-center gap-4">
                         <label for="kecamatan" class="text-sm font-medium text-gray-700">Kecamatan</label>
                         <select name="kecamatan" id="kecamatan" 
-                            class="col-span-2 border border-gray-300 rounded-lg p-2.5 text-sm w-full focus:ring-blue-500 focus:border-blue-500
+                            class="col-span-2 border border-gray-300 rounded-lg p-2.5 text-sm w-full
                                 {% if edit_obyekwisata %}bg-gray-200{% endif %}"
                             {% if edit_obyekwisata %}disabled{% endif %}>
                             <option value="">Pilih kecamatan</option>
@@ -240,7 +240,7 @@
                     <div class="grid grid-cols-3 items-center gap-4">
                         <label for="kategori" class="text-sm font-medium text-gray-700">Kategori</label>
                         <select name="kategori" id="kategori" 
-                            class="col-span-2 border border-gray-300 rounded-lg p-2.5 text-sm w-full focus:ring-blue-500 focus:border-blue-500">
+                            class="col-span-2 border border-gray-300 rounded-lg p-2.5 text-sm w-full">
                             <option value="">Pilih kategori</option>
                             {% for kat in kategoriwisata %}
                                 <option value="{{ kat.kategoriwisataKODE }}"
@@ -258,7 +258,7 @@
                     <div class="grid grid-cols-3 items-center gap-4">
                         <label for="alamat" class="text-sm font-medium text-gray-700">Alamat</label>
                         <input type="text" name="alamat" id="alamat"
-                            class="col-span-2 border border-gray-300 rounded-lg p-2.5 text-sm w-full focus:ring-blue-500 focus:border-blue-500"
+                            class="col-span-2 border border-gray-300 rounded-lg p-2.5 text-sm w-full"
                             placeholder="Masukkan alamat lengkap" value="{% if edit_obyekwisata %}{{ edit_obyekwisata.obyekALAMAT }}{% endif %}" maxlength="255">
                     </div>
 
@@ -266,7 +266,7 @@
                     <div class="grid grid-cols-3 items-center gap-4">
                         <label for="latitude" class="text-sm font-medium text-gray-700">Latitude</label>
                         <input type="number" name="latitude" id="latitude" step="any"
-                            class="col-span-2 border border-gray-300 rounded-lg p-2.5 text-sm w-full focus:ring-blue-500 focus:border-blue-500"
+                            class="col-span-2 border border-gray-300 rounded-lg p-2.5 text-sm w-full"
                             placeholder="Contoh: -7.123456" value="{% if edit_obyekwisata %}{{ edit_obyekwisata.obyekLATITUDE }}{% endif %}" required>
                     </div>
 
@@ -274,7 +274,7 @@
                     <div class="grid grid-cols-3 items-center gap-4">
                         <label for="longitude" class="text-sm font-medium text-gray-700">Longitude</label>
                         <input type="number" name="longitude" id="longitude" step="any"
-                            class="col-span-2 border border-gray-300 rounded-lg p-2.5 text-sm w-full focus:ring-blue-500 focus:border-blue-500"
+                            class="col-span-2 border border-gray-300 rounded-lg p-2.5 text-sm w-full"
                             placeholder="Contoh: 110.123456" value="{% if edit_obyekwisata %}{{ edit_obyekwisata.obyekLONGITUDE }}{% endif %}" required>
                     </div>
 
@@ -282,7 +282,7 @@
                     <div class="grid grid-cols-3 items-center gap-4">
                         <label for="jam_buka" class="text-sm font-medium text-gray-700">Jam Buka</label>
                         <input type="time" name="jam_buka" id="jam_buka"
-                            class="col-span-2 border border-gray-300 rounded-lg p-2.5 text-sm w-full focus:ring-blue-500 focus:border-blue-500"
+                            class="col-span-2 border border-gray-300 rounded-lg p-2.5 text-sm w-full"
                             value="{% if edit_obyekwisata and edit_obyekwisata.obyekJAMBUKA %}{{ edit_obyekwisata.obyekJAMBUKA|time:'H:i' }}{% endif %}">
                     </div>
 
@@ -290,7 +290,7 @@
                     <div class="grid grid-cols-3 items-center gap-4">
                         <label for="jam_tutup" class="text-sm font-medium text-gray-700">Jam Tutup</label>
                         <input type="time" name="jam_tutup" id="jam_tutup"
-                            class="col-span-2 border border-gray-300 rounded-lg p-2.5 text-sm w-full focus:ring-blue-500 focus:border-blue-500"
+                            class="col-span-2 border border-gray-300 rounded-lg p-2.5 text-sm w-full"
                             value="{% if edit_obyekwisata and edit_obyekwisata.obyekJAMTUTUP %}{{ edit_obyekwisata.obyekJAMTUTUP|time:'H:i' }}{% endif %}">
                     </div>
 
@@ -298,7 +298,7 @@
                     <div class="grid grid-cols-3 items-center gap-4">
                         <label for="popularitas" class="text-sm font-medium text-gray-700">Popularitas (1-5)</label>
                         <input type="number" name="popularitas" id="popularitas" min="1" max="5"
-                            class="col-span-2 border border-gray-300 rounded-lg p-2.5 text-sm w-full focus:ring-blue-500 focus:border-blue-500"
+                            class="col-span-2 border border-gray-300 rounded-lg p-2.5 text-sm w-full"
                             placeholder="Nilai 1-5" value="{% if edit_obyekwisata %}{{ edit_obyekwisata.obyekPOPULARITAS }}{% endif %}">
                     </div>
 
@@ -307,7 +307,7 @@
                         <label for="foto" class="text-sm font-medium text-gray-700">Foto</label>
                         <div class="col-span-2">
                             <input type="file" name="foto" id="foto" accept="image/*"
-                                class="border border-gray-300 rounded-lg p-2.5 text-sm w-full focus:ring-blue-500 focus:border-blue-500">
+                                class="border border-gray-300 rounded-lg p-2.5 text-sm w-full">
                             {% if edit_obyekwisata and edit_obyekwisata.obyekFOTO %}
                                 <div class="mt-2">
                                     <img src="/media/obyekwisata/{{ edit_obyekwisata.obyekFOTO }}" alt="Foto Sekarang" class="w-20 h-16 object-cover rounded border">
@@ -320,7 +320,7 @@
                     <div class="grid grid-cols-3 items-start gap-4">
                         <label for="definisi" class="text-sm font-medium text-gray-700">Definisi</label>
                         <textarea name="definisi" id="definisi" rows="3"
-                            class="col-span-2 border border-gray-300 rounded-lg p-2.5 text-sm w-full focus:ring-blue-500 focus:border-blue-500"
+                            class="col-span-2 border border-gray-300 rounded-lg p-2.5 text-sm w-full"
                             placeholder="Masukkan definisi obyek wisata">{% if edit_obyekwisata %}{{ edit_obyekwisata.obyekDEFINISI }}{% endif %}</textarea>
                     </div>
 
@@ -328,14 +328,14 @@
                     <div class="grid grid-cols-3 items-start gap-4">
                         <label for="keterangan" class="text-sm font-medium text-gray-700">Keterangan</label>
                         <textarea name="keterangan" id="keterangan" rows="3"
-                            class="col-span-2 border border-gray-300 rounded-lg p-2.5 text-sm w-full focus:ring-blue-500 focus:border-blue-500"
+                            class="col-span-2 border border-gray-300 rounded-lg p-2.5 text-sm w-full"
                             placeholder="Masukkan keterangan tambahan">{% if edit_obyekwisata %}{{ edit_obyekwisata.obyekKETERANGAN }}{% endif %}</textarea>
                     </div>
                 </div>
             <!-- Tombol -->
             <div class="flex justify-center mt-6">
                 <button type="submit"
-                    class="px-6 py-2 text-sm font-medium text-white bg-blue-700 rounded-lg shadow hover:bg-blue-800 focus:ring-4 focus:ring-blue-300">
+                    class="px-6 py-2 text-sm font-medium text-white bg-blue-700 rounded-lg shadow">
                     {% if edit_obyekwisata %} Ubah {% else %} Simpan {% endif %}
                 </button>
             </div>

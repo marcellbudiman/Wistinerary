@@ -26,6 +26,8 @@ import numpy as np
 import pandas as pd
 
 def run():
+    # .venv\Scripts\activate
+
     # user_id = 1
     # judul_perjalanan = '2hari10destinasi --6'
 

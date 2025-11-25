@@ -7,7 +7,7 @@
 
 
 
-<aside id="logo-sidebar" class="fixed top-0 left-0 z-40 w-64 h-screen transition-transform -translate-x-full bg-white border-r border-gray-200 sm:translate-x-0 dark:bg-gray-800 dark:border-gray-700" aria-label="Sidebar">
+<aside id="logo-sidebar" class="fixed top-0 left-0 z-40 w-64 h-screen bg-white border-r border-gray-200" aria-label="Sidebar">
    
    <nav class="w-full border-b">
    <div class="px-3 py-3 lg:px-5 lg:pl-3">
@@ -21,12 +21,12 @@
    </div>
    </nav>
    
-   <div class="h-full px-3 pb-4 overflow-y-auto bg-blue-primary dark:bg-gray-800" style='background:#3674B5'>
+   <div class="h-full px-3 pb-4 overflow-y-auto bg-blue-primary" style='background:#3674B5'>
       <ul class="space-y-2 font-medium">
          <!--Destinasi-->
          <li>
             <a href="{% url 'tambahobyekwisata' %}">
-               <button type="button" class="flex items-center w-full p-2 text-base text-white transition duration-75 rounded-lg group button_hover" aria-controls="dropdown-destinasi" data-collapse-toggle="dropdown-destinasi">
+               <button type="button" class="flex items-center w-full p-2 text-base text-white rounded-lg group button_hover" aria-controls="dropdown-destinasi" data-collapse-toggle="dropdown-destinasi">
                <span class="flex-1 ms-3 text-left rtl:text-right whitespace-nowrap">Destinasi</span>
                </button>
             </a>
@@ -35,7 +35,7 @@
          <!--Jarak Obyek-->
          <li>
             <a href="{% url 'tambahjarakobyek' %}">
-               <button type="button" class="flex items-center w-full p-2 text-base text-white transition duration-75 rounded-lg group button_hover" aria-controls="dropdown-destinasi" data-collapse-toggle="dropdown-destinasi">
+               <button type="button" class="flex items-center w-full p-2 text-base text-white rounded-lg group button_hover" aria-controls="dropdown-destinasi" data-collapse-toggle="dropdown-destinasi">
                <span class="flex-1 ms-3 text-left rtl:text-right whitespace-nowrap">Jarak Obyek</span>
                </button>
             </a>
@@ -45,7 +45,7 @@
          <!--Kegiatan-->
          <li>
             <a href="{% url 'tambahkegiatan' %}">
-               <button type="button" class="flex items-center w-full p-2 text-base text-white transition duration-75 rounded-lg group button_hover" aria-controls="dropdown-kegiatan" data-collapse-toggle="dropdown-kegiatan">
+               <button type="button" class="flex items-center w-full p-2 text-base text-white rounded-lg group button_hover" aria-controls="dropdown-kegiatan" data-collapse-toggle="dropdown-kegiatan">
                <span class="flex-1 ms-3 text-left rtl:text-right whitespace-nowrap">Kegiatan</span>
                </button>
             </a>
@@ -54,7 +54,7 @@
          <!--Berita-->
          <li>
             <a href="{% url 'tambahberita' %}">
-               <button type="button" class="flex items-center w-full p-2 text-base text-white transition duration-75 rounded-lg group button_hover" aria-controls="dropdown-berita" data-collapse-toggle="dropdown-berita">
+               <button type="button" class="flex items-center w-full p-2 text-base text-white rounded-lg group button_hover" aria-controls="dropdown-berita" data-collapse-toggle="dropdown-berita">
                <span class="flex-1 ms-3 text-left rtl:text-right whitespace-nowrap">Berita</span>
                </button>
             </a>
@@ -63,7 +63,7 @@
          <!--Kategori Wisata-->
          <li>
             <a href="{% url 'tambahkategoriwisata' %}">
-               <button type="button" class="flex items-center w-full p-2 text-base text-white transition duration-75 rounded-lg group button_hover" aria-controls="dropdown-kategoridestinasi" data-collapse-toggle="dropdown-kategoridestinasi">
+               <button type="button" class="flex items-center w-full p-2 text-base text-white rounded-lg group button_hover" aria-controls="dropdown-kategoridestinasi" data-collapse-toggle="dropdown-kategoridestinasi">
                <span class="flex-1 ms-3 text-left rtl:text-right whitespace-nowrap">Kategori Wisata</span>
                </button>
             </a>
@@ -72,7 +72,7 @@
          <!--Kategori Berita-->
          <li>
             <a href="{% url 'tambahkategoriberita' %}">
-               <button type="button" class="flex items-center w-full p-2 text-base text-white transition duration-75 rounded-lg group button_hover" aria-controls="dropdown-kategoriberita" data-collapse-toggle="dropdown-kategoriberita">
+               <button type="button" class="flex items-center w-full p-2 text-base text-white rounded-lg group button_hover" aria-controls="dropdown-kategoriberita" data-collapse-toggle="dropdown-kategoriberita">
                <span class="flex-1 ms-3 text-left rtl:text-right whitespace-nowrap">Kategori Berita</span>
                </button>
             </a>
@@ -81,7 +81,7 @@
          <!--Provinsi-->
          <li>
             <a href="{% url 'tambahprovinsi' %}">
-               <button type="button" class="flex items-center w-full p-2 text-base text-white transition duration-75 rounded-lg group button_hover" aria-controls="dropdown-provinsi" data-collapse-toggle="dropdown-provinsi">
+               <button type="button" class="flex items-center w-full p-2 text-base text-white rounded-lg group button_hover" aria-controls="dropdown-provinsi" data-collapse-toggle="dropdown-provinsi">
                <span class="flex-1 ms-3 text-left rtl:text-right whitespace-nowrap">Provinsi</span>
             </button>
             </a>
@@ -90,7 +90,7 @@
          <!--Kabupaten-->
          <li>
             <a href="{% url 'tambahkabupaten' %}">
-               <button type="button" class="flex items-center w-full p-2 text-base text-white transition duration-75 rounded-lg group button_hover" aria-controls="dropdown-kabupaten" data-collapse-toggle="dropdown-kabupaten">
+               <button type="button" class="flex items-center w-full p-2 text-base text-white rounded-lg group button_hover" aria-controls="dropdown-kabupaten" data-collapse-toggle="dropdown-kabupaten">
                <span class="flex-1 ms-3 text-left rtl:text-right whitespace-nowrap">Kabupaten</span>
             </button>
             </a>
@@ -99,7 +99,7 @@
          <!--Kecamatan-->
          <li>
             <a href="{% url 'tambahkecamatan' %}">
-               <button type="button" class="flex items-center w-full p-2 text-base text-white transition duration-75 rounded-lg group button_hover" aria-controls="dropdown-kecamatan" data-collapse-toggle="dropdown-kecamatan">
+               <button type="button" class="flex items-center w-full p-2 text-base text-white rounded-lg group button_hover" aria-controls="dropdown-kecamatan" data-collapse-toggle="dropdown-kecamatan">
                <span class="flex-1 ms-3 text-left rtl:text-right whitespace-nowrap">Kecamatan</span>
                </button>
             </a>
