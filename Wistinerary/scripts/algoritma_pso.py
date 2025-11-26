@@ -266,79 +266,6 @@ class CalculatePSO :
         # return pbest_value, routes, destination_cant_visit, total_time_spend, total_rating_scaled, routes_time, routes_schedule
         return pbest_value, routes, destination_cant_visit, total_time_spend, total_rating_scaled, routes_schedule
 
-    def create_zone_optimized_route(self, distance_matrix, labels, destination_data, num_zones=3):
-        """
-        Optimal: zona berdasarkan clustering geografis (koordinat)
-        """
-        
-        # Siapkan data koordinat (skip hotel/index 0)
-        coordinates = []
-        label_to_coord = {}
-        
-        for label in labels[1:]:  # skip 'H' (hotel)
-            # Cari koordinat dari destination_data
-            for dest in destination_data:
-                if dest['id'] == label:
-                    # Asumsi destination_data punya lat/lng
-                    lat = dest.get('latitude', 0) or dest.get('lat', 0)
-                    lng = dest.get('longitude', 0) or dest.get('lng', 0)
-                    coordinates.append([lat, lng])
-                    label_to_coord[label] = (lat, lng)
-                    break
-        
-        # Clustering dengan KMeans
-        coordinates_array = np.array(coordinates)
-        kmeans = KMeans(n_clusters=min(num_zones, len(coordinates)), random_state=42)
-        cluster_labels = kmeans.fit_predict(coordinates_array)
-        
-        # Kelompokkan destinasi per cluster
-        clusters = {}
-        for idx, label in enumerate(labels[1:]):
-            cluster_id = cluster_labels[idx]
-            if cluster_id not in clusters:
-                clusters[cluster_id] = []
-            clusters[cluster_id].append(label)
-        
-        # Urutkan cluster berdasarkan jarak ke hotel
-        cluster_distances = []
-        for cluster_id, cluster_labels_list in clusters.items():
-            # Ambil destinasi terdekat hotel di cluster ini
-            min_dist = min(distance_matrix[0][labels.index(lbl)] for lbl in cluster_labels_list)
-            cluster_distances.append((cluster_id, min_dist))
-        
-        cluster_distances.sort(key=lambda x: x[1])
-        
-        # Buat rute per cluster
-        route = []
-        for cluster_id, _ in cluster_distances:
-            cluster_labels_list = clusters[cluster_id]
-            
-            # Dalam cluster, gunakan nearest neighbor
-            unvisited = cluster_labels_list.copy()
-            
-            # Mulai dari destinasi terdekat hotel di cluster ini
-            current_idx = min(
-                [labels.index(lbl) for lbl in unvisited],
-                key=lambda x: distance_matrix[0][x]
-            )
-            current = labels[current_idx]
-            route.append(current)
-            unvisited.remove(current)
-            
-            # Nearest neighbor dalam cluster
-            while unvisited:
-                current_idx = labels.index(current)
-                nearest = min(
-                    unvisited,
-                    key=lambda lbl: distance_matrix[current_idx][labels.index(lbl)]
-                )
-                route.append(nearest)
-                current = nearest
-                unvisited.remove(nearest)
-        
-        return route
-
-
     def calculate_pso (self, routes_data, num_particle, destination_data, max_iteration, c1, c2, num_days, skala_awal, skala_akhir, jam_mulai, jam_selesai, judul_itinerary):
         # excel_rute_desintasi = pd.DataFrame(routes_data)
         # excel_destinasi = pd.DataFrame(destination_data)
@@ -457,9 +384,8 @@ class CalculatePSO :
             skala = skala_awal - ((skala_awal - skala_akhir) * (iteration / max_iteration))
 
             for particle in list_particle:
-                # 🔥 SIMPAN POSISI SEBELUM OPERASI APAPUN (DEEP COPY!)
-                last_position = copy.deepcopy(particle['position'])  # ← PENTING!
-                last_pbest = copy.deepcopy(particle['pbest_position'])  # ← TAMBAHAN
+                last_position = copy.deepcopy(particle['position'])
+                last_pbest = copy.deepcopy(particle['pbest_position'])
                 last_value = copy.deepcopy(particle['current_fitness'])
                 last_num_cant_visit = len(particle.get('destination_cant_visit', []))
                 
@@ -485,9 +411,6 @@ class CalculatePSO :
                             particle['position'][idx2], particle['position'][idx1]
                         )
 
-                # Simpan posisi SETELAH swap untuk logging
-                # new_position = copy.deepcopy(particle['position'])  # ← DEEP COPY!
-
                 # === Hitung ulang fitness
                 value_time_rating, routes, destination_cant_visit, total_time_spend, total_rating_scaled, routes_schedule = self.decode_and_evaluate(
                     permutation=particle['position'], labels=labels,
@@ -503,7 +426,7 @@ class CalculatePSO :
                 (new_num_cant_visit == last_num_cant_visit and value_time_rating < particle['pbest_fitness']):
                     is_pbest_updated = True
                     particle['pbest_fitness'] = value_time_rating
-                    particle['pbest_position'] = copy.deepcopy(particle['position'])  # ← DEEP COPY!
+                    particle['pbest_position'] = copy.deepcopy(particle['position'])
                     particle['rute'] = routes
                     particle['waktu'] = total_time_spend
                     particle['total_rating_scaled'] = total_rating_scaled
@@ -515,7 +438,7 @@ class CalculatePSO :
                 (new_num_cant_visit == last_gbest_cant_visit and value_time_rating < gbest_fitness):
                     is_gbest_updated = True
                     gbest_fitness = value_time_rating
-                    gbest_position = copy.deepcopy(particle['position'])  # ← DEEP COPY!
+                    gbest_position = copy.deepcopy(particle['position'])
                     gbest_routes = routes
                     gbest_cant_visit = destination_cant_visit
 
